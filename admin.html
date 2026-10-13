@@ -111,13 +111,25 @@
           </svg>
         </div>
         <h2 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">Đăng Nhập Quản Trị SAFE-LS</h2>
-        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1.5rem;">Dành cho giáo viên và nhóm nghiên cứu quản lý số liệu</p>
-
-        <input type="password" id="pinInput" placeholder="Nhập mã PIN (Mặc định: safels2026)" onkeydown="if(event.key === 'Enter') checkPin()" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 1rem; text-align: center; margin-bottom: 1rem;">
-        <button class="primary-btn" style="width: 100%; justify-content: center;" onclick="checkPin()">
-          Đăng Nhập Hệ Thống
-        </button>
-        <div id="pinErrorMsg" style="color: #dc2626; font-size: 0.84rem; font-weight: 600; margin-top: 0.75rem; display: none;">Mã PIN không chính xác! Vui lòng thử lại.</div>
+        <form onsubmit="event.preventDefault(); checkPin();">
+          <div style="position: relative; margin-bottom: 1rem;">
+            <input type="password" id="pinInput" placeholder="Nhập mã PIN (Mặc định: safels2026)" autocomplete="current-password" style="width: 100%; padding: 0.85rem 2.8rem 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 1rem; text-align: center;">
+            <button type="button" onclick="togglePinVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; padding: 4px;" title="Hiện/ẩn mã PIN">
+              <span id="eyeIcon">👁️</span>
+            </button>
+          </div>
+          <button type="submit" class="primary-btn" style="width: 100%; justify-content: center; padding: 0.85rem 1rem; font-size: 1rem;">
+            Đăng Nhập Hệ Thống
+          </button>
+        </form>
+        <div id="pinErrorMsg" style="color: #dc2626; font-size: 0.84rem; font-weight: 600; margin-top: 0.85rem; display: none;">
+          ⚠️ Mã PIN chưa đúng (Mặc định: <code>safels2026</code>). Hãy kiểm tra lại phím CapsLock hoặc bộ gõ tiếng Việt.
+        </div>
+        <div style="margin-top: 1rem;">
+          <button type="button" onclick="quickFillPin()" style="background: none; border: none; color: #1d4ed8; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: underline;">
+            👉 Điền nhanh mã mặc định: safels2026
+          </button>
+        </div>
       </div>
 
       <!-- ==================== PHẦN 2: BẢNG ĐIỀU KHIỂN CHÍNH (ADMIN DASHBOARD) ==================== -->
@@ -407,19 +419,53 @@ function doGet(e) {
     const CORRECT_PIN = 'safels2026';
 
     function checkPin() {
-      const pin = document.getElementById('pinInput').value.trim();
+      const pinRaw = document.getElementById('pinInput').value.trim();
       const err = document.getElementById('pinErrorMsg');
-      if (pin === CORRECT_PIN || pin === localStorage.getItem('safels_custom_pin')) {
+
+      // Tự động chuẩn hóa nếu bộ gõ tiếng Việt Unikey Telex biến 'af' thành 'à'
+      const pinNorm = pinRaw.toLowerCase()
+        .replace(/à/g, 'af')
+        .replace(/è/g, 'ef')
+        .replace(/sàels/g, 'safels');
+
+      const isValid = (
+        pinRaw.toLowerCase() === CORRECT_PIN ||
+        pinNorm === CORRECT_PIN ||
+        pinRaw === localStorage.getItem('safels_custom_pin')
+      );
+
+      if (isValid) {
         document.getElementById('adminLoginBox').style.display = 'none';
         document.getElementById('adminDashboardBox').style.display = 'block';
         document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
+        if (err) err.style.display = 'none';
         loadAdminStats();
         loadGSheetConfig();
         syncDataFromGSheet(true); // Tự động đồng bộ ngay khi đăng nhập
         switchQuestionView('gv');
       } else {
-        err.style.display = 'block';
+        if (err) err.style.display = 'block';
       }
+    }
+
+    function togglePinVisibility() {
+      const input = document.getElementById('pinInput');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        icon.textContent = '👁️';
+      }
+    }
+
+    function quickFillPin() {
+      const input = document.getElementById('pinInput');
+      input.value = 'safels2026';
+      input.type = 'text';
+      document.getElementById('eyeIcon').textContent = '🙈';
+      checkPin();
     }
 
     function logoutAdmin() {
