@@ -226,88 +226,132 @@
             </ol>
 
             <div class="code-block" id="appsScriptCode">
+// =================================================================
+// SAFE-LS - BỘ ĐỒNG BỘ 2 CHIỀU GOOGLE SHEETS & ADMIN DASHBOARD
+// =================================================================
+
 // 1. NHẬN BÀI LÀM VÀ TỰ ĐỘNG TÁCH 2 TRANG TÍNH (GIÁO VIÊN & HỌC SINH)
 function doPost(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var data = JSON.parse(e.postData.contents);
-  
-  var targetSheetName = (data.role && data.role.indexOf("Giáo viên") !== -1) ? "Giáo viên" : "Học sinh";
-  var sheet = ss.getSheetByName(targetSheetName);
-  
-  if (!sheet) {
-    sheet = ss.insertSheet(targetSheetName);
-  }
-  
-  if (sheet.getLastRow() === 0) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (!e || !e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(JSON.stringify({ result: "no_data" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    var data = JSON.parse(e.postData.contents);
+    var targetSheetName = (data.role && data.role.indexOf("Giáo viên") !== -1) ? "Giáo viên" : "Học sinh";
+    var sheet = ss.getSheetByName(targetSheetName);
+    
+    if (!sheet) {
+      sheet = ss.insertSheet(targetSheetName);
+    }
+    
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "Thời gian", "Đối tượng", "Họ tên", "Trường/Lớp", 
+        "Điểm số", "Phần trăm", "Xếp loại", 
+        "1. Nhận diện DLCN", "2. Bảo vệ tài khoản", "3. Lừa đảo", 
+        "4. Quyền riêng tư", "5. AI an toàn", "6. Xử lý sự cố"
+      ]);
+    }
+    
     sheet.appendRow([
-      "Thời gian", "Đối tượng", "Họ tên", "Trường/Lớp", 
-      "Điểm số", "Phần trăm", "Xếp loại", 
-      "1. Nhận diện DLCN", "2. Bảo vệ tài khoản", "3. Lừa đảo", 
-      "4. Quyền riêng tư", "5. AI an toàn", "6. Xử lý sự cố"
+      data.timestamp || Utilities.formatDate(new Date(), "GMT+7", "dd/MM/yyyy HH:mm:ss"),
+      data.role, 
+      data.name, 
+      data.organization,
+      data.score, 
+      (data.percentage !== undefined ? data.percentage + "%" : ""), 
+      data.level,
+      data.skill1, data.skill2, data.skill3,
+      data.skill4, data.skill5, data.skill6
     ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ result: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
-  
-  sheet.appendRow([
-    data.timestamp, data.role, data.name, data.organization,
-    data.score, data.percentage + "%", data.level,
-    data.skill1, data.skill2, data.skill3,
-    data.skill4, data.skill5, data.skill6
-  ]);
-  
-  return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
-// 2. GỬI DỮ LIỆU TỪ GOOGLE SHEETS VỀ TRANG ADMIN (ĐỒNG BỘ 2 CHIỀU)
+// 2. GỬI DỮ LIỆU TỪ TẤT CẢ TRANG TÍNH VỀ TRANG ADMIN (ĐỒNG BỘ 2 CHIỀU)
 function doGet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var results = [];
-  var sheetNames = ["Giáo viên", "Học sinh", "Trang tính 1"];
-  
-  sheetNames.forEach(function(name) {
-    var sheet = ss.getSheetByName(name);
-    if (sheet && sheet.getLastRow() > 1) {
-      var numRows = sheet.getLastRow() - 1;
-      var numCols = Math.min(sheet.getLastColumn(), 13);
-      var values = sheet.getRange(2, 1, numRows, numCols).getValues();
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var allSheets = ss.getSheets();
+    var results = [];
+    
+    allSheets.forEach(function(sheet) {
+      var sheetName = sheet.getName();
+      var lastRow = sheet.getLastRow();
       
-      values.forEach(function(row) {
-        if (row[0] || row[2]) {
-          var pctVal = row[5];
-          if (typeof pctVal === "string") {
-            pctVal = parseInt(pctVal.replace("%", "").trim()) || 0;
-          } else if (typeof pctVal === "number") {
-            pctVal = Math.round(pctVal > 1 ? pctVal : pctVal * 100);
-          } else {
-            pctVal = 0;
-          }
+      if (lastRow > 1) {
+        var numRows = lastRow - 1;
+        var numCols = Math.min(sheet.getLastColumn(), 13);
+        if (numCols >= 3) {
+          var values = sheet.getRange(2, 1, numRows, numCols).getValues();
           
-          results.push({
-            timestamp: row[0] ? String(row[0]) : "",
-            role: row[1] ? String(row[1]) : (name === "Giáo viên" ? "Giáo viên" : "Học sinh"),
-            name: row[2] ? String(row[2]) : "Ẩn danh",
-            organization: row[3] ? String(row[3]) : "",
-            score: row[4] ? String(row[4]) : "",
-            percentage: pctVal,
-            level: row[6] ? String(row[6]) : "",
-            skill1: row[7] ? String(row[7]) : "",
-            skill2: row[8] ? String(row[8]) : "",
-            skill3: row[9] ? String(row[9]) : "",
-            skill4: row[10] ? String(row[10]) : "",
-            skill5: row[11] ? String(row[11]) : "",
-            skill6: row[12] ? String(row[12]) : ""
+          values.forEach(function(row) {
+            var colName = row[2] ? String(row[2]).trim() : "";
+            var colTime = row[0] ? String(row[0]).trim() : "";
+            
+            if ((colName || colTime) && colName !== "Họ tên") {
+              var timeStr = "";
+              if (row[0] instanceof Date) {
+                timeStr = Utilities.formatDate(row[0], Session.getScriptTimeZone() || "GMT+7", "dd/MM/yyyy HH:mm:ss");
+              } else {
+                timeStr = String(row[0] || "");
+              }
+              
+              var pctVal = row[5];
+              if (typeof pctVal === "string") {
+                pctVal = parseInt(pctVal.replace("%", "").trim()) || 0;
+              } else if (typeof pctVal === "number") {
+                pctVal = Math.round(pctVal > 1 ? pctVal : pctVal * 100);
+              } else {
+                pctVal = 0;
+              }
+              
+              var roleStr = row[1] ? String(row[1]).trim() : "";
+              if (!roleStr) {
+                roleStr = sheetName.indexOf("Giáo viên") !== -1 ? "Giáo viên" : "Học sinh";
+              }
+              
+              results.push({
+                timestamp: timeStr,
+                role: roleStr,
+                name: colName || "Ẩn danh",
+                organization: row[3] ? String(row[3]).trim() : "",
+                score: row[4] ? String(row[4]).trim() : "",
+                percentage: pctVal,
+                level: row[6] ? String(row[6]).trim() : "",
+                skill1: row[7] ? String(row[7]).trim() : "",
+                skill2: row[8] ? String(row[8]).trim() : "",
+                skill3: row[9] ? String(row[9]).trim() : "",
+                skill4: row[10] ? String(row[10]).trim() : "",
+                skill5: row[11] ? String(row[11]).trim() : "",
+                skill6: row[12] ? String(row[12]).trim() : ""
+              });
+            }
           });
         }
-      });
-    }
-  });
-  
-  results.reverse();
-  return ContentService.createTextOutput(JSON.stringify({
-    status: "success",
-    total: results.length,
-    data: results
-  })).setMimeType(ContentService.MimeType.JSON);
+      }
+    });
+    
+    results.reverse();
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      total: results.length,
+      data: results
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
 }</div>
 
             <button class="secondary-btn" style="margin-bottom: 1rem; font-size: 0.84rem;" onclick="copyAppsScript()">
@@ -570,7 +614,8 @@ function doGet(e) {
       }
 
       try {
-        const response = await fetch(url);
+        const fetchUrl = url + (url.includes('?') ? '&' : '?') + 'nocache=' + Date.now();
+        const response = await fetch(fetchUrl);
         const result = await response.json();
         
         if (result && result.status === 'success' && Array.isArray(result.data)) {
@@ -597,7 +642,7 @@ function doGet(e) {
     }
 
     async function testGSheetConnection() {
-      const url = document.getElementById('gsheetUrlInput').value.trim();
+      const url = document.getElementById('gsheetUrlInput').value.trim() || DEFAULT_GSHEET_WEBHOOK_URL;
       if (!url) {
         alert('Vui lòng nhập URL Google Sheets trước!');
         return;
@@ -621,7 +666,8 @@ function doGet(e) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(testPayload)
         });
-        alert('Đã gửi 1 dòng dữ liệu thử nghiệm sang Google Sheets! Hãy mở file Google Trang tính của bạn để kiểm tra kết quả.');
+        alert('Đã gửi 1 dòng dữ liệu thử nghiệm sang Google Sheets! Đang tự động đồng bộ lại bảng dữ liệu...');
+        setTimeout(() => syncDataFromGSheet(true), 2000);
       } catch (err) {
         alert('Lỗi kết nối: ' + err.message);
       }
