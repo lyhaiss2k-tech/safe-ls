@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAFE-LS | Cổng giáo dục kỹ năng bảo vệ dữ liệu cá nhân</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="top-navbar">
+    <div class="navbar-inner">
+      <a class="brand-logo" id="brandLogo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <span>SAFE-LS</span>
+        <span class="brand-badge">Lạng Sơn</span>
+      </a>
+
+      <nav class="nav-pills">
+        <button class="nav-pill active" data-target="home">Trang chủ</button>
+        <button class="nav-pill" data-target="module-1">1. Thư viện</button>
+        <button class="nav-pill" data-target="module-2">2. Góc giáo viên</button>
+        <button class="nav-pill" data-target="module-3">3. Góc học sinh</button>
+        <button class="nav-pill" data-target="module-4">4. Tình huống</button>
+        <button class="nav-pill" data-target="module-5">5. Khi có sự cố</button>
+        <button class="nav-pill" data-target="module-6">6. Kiểm tra & Khảo sát</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="portal-shell">
+
+      <!-- ==================== VIEW 0: HOME PORTAL ==================== -->
+      <section class="section-view active" id="home">
+        
+        <!-- Hero Banner (Exact match with user's mockup image) -->
+        <div class="hero-banner">
+          <div class="hero-shield">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <h1 class="hero-title">SAFE-LS</h1>
+          <h2 class="hero-subtitle">Cổng giáo dục kỹ năng bảo vệ dữ liệu cá nhân</h2>
+          <p class="hero-project-tag">
+            Dự án: <em>“Xây dựng mô hình giáo dục kỹ năng bảo vệ dữ liệu cá nhân cho giáo viên và học sinh trong môi trường giáo dục số trên địa bàn tỉnh Lạng Sơn”</em>
+          </p>
+          <button class="hero-qr-trigger" id="openQrBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="5" height="5" x="3" y="3" rx="1"/>
+              <rect width="5" height="5" x="16" y="3" rx="1"/>
+              <rect width="5" height="5" x="3" y="16" rx="1"/>
+              <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+              <path d="M21 21v.01"/>
+              <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+              <path d="M3 12h.01"/>
+              <path d="M12 3h.01"/>
+              <path d="M12 16v.01"/>
+              <path d="M16 12h1"/>
+              <path d="M21 12v.01"/>
+              <path d="M12 21v-1"/>
+            </svg>
+            <span>Đường link chính · Mã QR truy cập</span>
+          </button>
+        </div>
+
+        <!-- 6-Card Grid (Exact match with user's mockup image) -->
+        <div class="portal-grid">
+          
+          <!-- Card 1 -->
+          <div class="portal-card" data-target="module-1">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">1. Thư viện kiến thức</h3>
+              <p class="card-desc">Khái niệm, quyền riêng tư, pháp luật, nguyên tắc an toàn.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Xem chi tiết</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="portal-card" data-target="module-2">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+              </div>
+              <h3 class="card-title">2. Góc giáo viên</h3>
+              <p class="card-desc">Dữ liệu học sinh, hồ sơ lớp, hình ảnh, tài liệu và AI.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Xem cẩm nang</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="portal-card" data-target="module-3">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <h3 class="card-title">3. Góc học sinh</h3>
+              <p class="card-desc">Tài khoản, mạng xã hội, học bổng, trò chơi và AI.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Khám phá ngay</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="portal-card" data-target="module-4">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">4. Thử thách tình huống</h3>
+              <p class="card-desc">Câu hỏi tương tác, lựa chọn cách xử lý và giải thích đáp án.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Thực hành tình huống</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="portal-card" data-target="module-5">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <h3 class="card-title">5. Khi có sự cố</h3>
+              <p class="card-desc">Các bước ứng phó và đầu mối cần báo cáo, tìm kiếm hỗ trợ.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Quy trình ứng phó</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="portal-card" data-target="module-6">
+            <div>
+              <div class="card-icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                  <rect width="8" height="4" x="8" y="2" rx="1"/>
+                  <path d="m9 14 2 2 4-4"/>
+                </svg>
+              </div>
+              <h3 class="card-title">6. Kiểm tra kỹ năng</h3>
+              <p class="card-desc">Khảo sát đầu vào, bài kiểm tra và đánh giá sau học tập.</p>
+            </div>
+            <div class="card-footer-link">
+              <span>Làm bài đánh giá</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Acronym Strip & Theoretical Model (From Research Proposal) -->
+        <div class="acronym-box">
+          <div class="acronym-title">Ý nghĩa thành tố Mô hình SAFE-LS</div>
+          <div class="acronym-grid">
+            <div class="acronym-item">
+              <div class="acronym-letter">S</div>
+              <div class="acronym-word">Secure</div>
+              <div class="acronym-meaning">Bảo vệ dữ liệu</div>
+            </div>
+            <div class="acronym-item">
+              <div class="acronym-letter">A</div>
+              <div class="acronym-word">Awareness</div>
+              <div class="acronym-meaning">Nhận thức nguy cơ</div>
+            </div>
+            <div class="acronym-item">
+              <div class="acronym-letter">F</div>
+              <div class="acronym-word">First response</div>
+              <div class="acronym-meaning">Phản ứng & Xử lý</div>
+            </div>
+            <div class="acronym-item">
+              <div class="acronym-letter">E</div>
+              <div class="acronym-word">Education</div>
+              <div class="acronym-meaning">Giáo dục trải nghiệm</div>
+            </div>
+            <div class="acronym-item">
+              <div class="acronym-letter" style="background: #fef3c7; color: #b45309;">LS</div>
+              <div class="acronym-word">Lạng Sơn</div>
+              <div class="acronym-meaning">Trường học Lạng Sơn</div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </section>
+
+      <!-- ==================== VIEW 1: THƯ VIỆN KIẾN THỨC ==================== -->
+      <section class="section-view" id="module-1">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 1</div>
+        </div>
+
+        <h2 class="section-heading">1. Thư viện kiến thức bảo vệ dữ liệu cá nhân</h2>
+        <p class="section-sub">Tổng quan khái niệm, cơ sở pháp lý và 6 nhóm kỹ năng cơ bản theo tiêu chuẩn mô hình SAFE-LS.</p>
+
+        <!-- Legal Basis & Definition -->
+        <div class="info-grid-2">
+          <div class="content-box highlight-blue">
+            <h3 class="box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Dữ liệu cá nhân trong trường học là gì?
+            </h3>
+            <p style="font-size: 0.92rem; color: #334155; margin-bottom: 0.5rem;">
+              Là mọi thông tin gắn liền hoặc có thể giúp nhận diện một cá nhân (giáo viên, học sinh, phụ huynh), bao gồm:
+            </p>
+            <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: #475569;">
+              <li><strong>Dữ liệu cơ bản:</strong> Họ tên, ngày sinh, số điện thoại, hình ảnh chân dung, địa chỉ nhà riêng, tài khoản email.</li>
+              <li><strong>Dữ liệu nhạy cảm:</strong> Số căn cước công dân (CCCD)/định danh, kết quả học tập/học bạ, tình trạng sức khỏe, hoàn cảnh gia đình, dữ liệu sinh trắc học.</li>
+            </ul>
+          </div>
+
+          <div class="content-box highlight-green">
+            <h3 class="box-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+              Cơ sở pháp lý Việt Nam hiện hành
+            </h3>
+            <ul style="padding-left: 1.25rem; font-size: 0.88rem; color: #334155; line-height: 1.7;">
+              <li><strong>Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15:</strong> Quy định quyền bất khả xâm phạm và nghĩa vụ bảo vệ dữ liệu.</li>
+              <li><strong>Nghị định số 356/2025/NĐ-CP:</strong> Quy định chi tiết các biện pháp xử phạt và bảo vệ dữ liệu trẻ em trên không gian mạng.</li>
+              <li><strong>Luật An ninh mạng số 24/2018/QH14:</strong> Bảo vệ hệ thống thông tin và phòng chống tội phạm mạng.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 6 Core Skills -->
+        <div class="content-box" style="background: #ffffff;">
+          <h3 class="box-title" style="color: #1e3a8a;">Sáu (06) nhóm kỹ năng cốt lõi của Mô hình SAFE-LS (Phần II.3)</h3>
+          <div class="info-grid-3" style="margin-bottom: 0;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">1. Nhận diện dữ liệu</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Phân biệt thông tin công khai và thông tin riêng tư cần hạn chế chia sẻ.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">2. Bảo vệ tài khoản & mật khẩu</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Đặt mật khẩu mạnh, bảo vệ mã OTP, không dùng chung mật khẩu.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">3. Nhận diện nguy cơ & lừa đảo</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Phát hiện link độc hại, tin nhắn giả mạo mạo danh thầy cô/bạn bè.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">4. Quản lý quyền riêng tư</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Kiểm soát quyền truy cập app, thiết lập quyền riêng tư mạng xã hội.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">5. Sử dụng AI an toàn</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Tuân thủ quy tắc 3 câu hỏi trước khi đưa dữ liệu vào các công cụ AI.</p>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+              <strong style="color: #1d4ed8; font-size: 0.95rem;">6. Xử lý sự cố (First response)</strong>
+              <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">Biết dừng hành vi nguy cơ, đổi mật khẩu, lưu bằng chứng và báo cáo.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 Golden Rules (Phụ lục 6) -->
+        <div class="content-box highlight-amber">
+          <h3 class="box-title" style="color: #92400e;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            Bộ 10 Nguyên tắc vàng bảo vệ dữ liệu cá nhân trong trường học (Phụ lục 6)
+          </h3>
+          <div class="golden-rules-grid">
+            <div class="rule-item"><span class="rule-num">1</span><div><strong>Nghĩ trước khi chia sẻ</strong>: Không công khai thông tin cá nhân không cần thiết.</div></div>
+            <div class="rule-item"><span class="rule-num">2</span><div><strong>Không chia sẻ mật khẩu</strong>: Giữ kín mật khẩu với bất kỳ ai, kể cả bạn bè.</div></div>
+            <div class="rule-item"><span class="rule-num">3</span><div><strong>Không cung cấp mã xác thực</strong>: Mã OTP là chìa khóa riêng của bạn.</div></div>
+            <div class="rule-item"><span class="rule-num">4</span><div><strong>Kiểm tra trước khi nhấp link</strong>: Cảnh giác với link lạ, quà tặng ảo.</div></div>
+            <div class="rule-item"><span class="rule-num">5</span><div><strong>Kiểm tra người gửi</strong>: Xác minh danh tính người gửi trước khi trả lời.</div></div>
+            <div class="rule-item"><span class="rule-num">6</span><div><strong>Hạn chế chia sẻ công khai</strong>: Đăng ảnh học sinh cần che danh sách riêng tư.</div></div>
+            <div class="rule-item"><span class="rule-num">7</span><div><strong>Kiểm tra quyền riêng tư</strong>: Đóng các quyền truy cập ứng dụng không cần thiết.</div></div>
+            <div class="rule-item"><span class="rule-num">8</span><div><strong>Cẩn trọng khi đưa dữ liệu vào AI</strong>: Không đưa dữ liệu nhạy cảm vào prompt.</div></div>
+            <div class="rule-item"><span class="rule-num">9</span><div><strong>Khi nghi ngờ, hãy dừng lại</strong>: Lưu lại ảnh chụp màn hình bằng chứng.</div></div>
+            <div class="rule-item"><span class="rule-num">10</span><div><strong>Báo cho người có trách nhiệm</strong>: Báo ngay GVCN, BGH hoặc gọi Tổng đài 111.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 2: GÓC GIÁO VIÊN ==================== -->
+      <section class="section-view" id="module-2">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 2 · Dành cho Thầy/Cô</div>
+        </div>
+
+        <h2 class="section-heading">2. Góc giáo viên – Bảo vệ dữ liệu trường học</h2>
+        <p class="section-sub">Trách nhiệm nghề nghiệp, quản lý hồ sơ học sinh và kỹ năng sử dụng công nghệ an toàn.</p>
+
+        <!-- Teacher's Responsibility & AI Prompt Rules -->
+        <div class="info-grid-2">
+          <div class="content-box highlight-blue">
+            <h3 class="box-title">Quản lý hồ sơ lớp & Bảo vệ dữ liệu học sinh</h3>
+            <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+              <li><strong>Bảng điểm & Hồ sơ:</strong> Không gửi file bảng điểm có CCCD, SĐT phụ huynh lên nhóm Zalo công khai của lớp. Sử dụng tài khoản trường học được phân quyền.</li>
+              <li><strong>Hình ảnh học sinh:</strong> Khi đăng tải ảnh hoạt động lớp, kiểm tra kỹ hậu cảnh tránh để lộ bảng tên, thẻ học sinh, danh sách kèm số điện thoại.</li>
+              <li><strong>Thiết bị giảng dạy:</strong> Khóa màn hình máy tính (Windows + L) khi rời khỏi bàn giáo viên tại phòng học hoặc phòng hội đồng.</li>
+            </ul>
+          </div>
+
+          <div class="content-box highlight-amber">
+            <h3 class="box-title">Quy tắc 3 câu hỏi trước khi đưa dữ liệu vào AI (Giải pháp 5)</h3>
+            <p style="font-size: 0.88rem; color: #475569; margin-bottom: 0.65rem;">
+              Trước khi đưa văn bản, nhận xét hoặc bảng dữ liệu vào ChatGPT / Gemini / Claude:
+            </p>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; border-left: 4px solid #f59e0b; font-size: 0.88rem;">
+              <strong>Câu hỏi 1:</strong> Thông tin này có phải dữ liệu cá nhân của học sinh hay trường học không?
+            </div>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; border-left: 4px solid #f59e0b; font-size: 0.88rem;">
+              <strong>Câu hỏi 2:</strong> Có thực sự cần thiết phải đưa thông tin đó vào công cụ AI không?
+            </div>
+            <div style="background: #ffffff; border-radius: 8px; padding: 0.75rem; border-left: 4px solid #10b981; font-size: 0.88rem;">
+              <strong>Câu hỏi 3:</strong> Đã ẩn danh hóa (xóa tên thật, đổi thành Học sinh A, Học sinh B) trước khi gửi chưa?
+            </div>
+          </div>
+        </div>
+
+        <!-- 5-Minute Digital Safety Program (Giải pháp 3 & Phụ lục 5) -->
+        <div class="content-box">
+          <h3 class="box-title">Khung chương trình: "5 phút kiểm tra an toàn số" trong tiết sinh hoạt lớp (Giải pháp 3)</h3>
+          <p style="font-size: 0.9rem; color: #475569; margin-bottom: 0.85rem;">
+            Thầy/cô có thể dành 5 phút đầu mỗi tuần trong tiết Sinh hoạt lớp hoặc Hoạt động trải nghiệm để kiểm tra theo lịch trình:
+          </p>
+          <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Tuần</th>
+                <th style="width: 35%;">Chủ đề trọng tâm</th>
+                <th>Hoạt động giáo viên hướng dẫn học sinh</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Tuần 1</strong></td>
+                <td><span class="badge-tag">Mật khẩu</span></td>
+                <td>Học sinh tự rà soát mật khẩu tài khoản học tập, đổi mật khẩu yếu sang mật khẩu cụm từ an toàn.</td>
+              </tr>
+              <tr>
+                <td><strong>Tuần 2</strong></td>
+                <td><span class="badge-tag">Đường link & Lừa đảo</span></td>
+                <td>Cảnh báo chiêu trò mạo danh gửi link tặng skin game, hướng dẫn cách đọc tên miền (URL) chuẩn.</td>
+              </tr>
+              <tr>
+                <td><strong>Tuần 3</strong></td>
+                <td><span class="badge-tag">Quyền riêng tư</span></td>
+                <td>Rà soát quyền riêng tư bài viết trên Facebook, TikTok; kiểm tra danh sách app được cấp quyền.</td>
+              </tr>
+              <tr>
+                <td><strong>Tuần 4</strong></td>
+                <td><span class="badge-tag">Trí tuệ nhân tạo (AI)</span></td>
+                <td>Thực hành nguyên tắc ẩn danh hóa: Không tải ảnh cá nhân hoặc thông tin bạn bè lên các app AI.</td>
+              </tr>
+              <tr>
+                <td><strong>Tuần 5</strong></td>
+                <td><span class="badge-tag">Tài khoản & Thiết bị</span></td>
+                <td>Đăng xuất tài khoản khỏi máy tính phòng Tin học và các thiết bị lạ; kích hoạt xác thực 2 lớp.</td>
+              </tr>
+              <tr>
+                <td><strong>Tuần 6</strong></td>
+                <td><span class="badge-tag">Xử lý sự cố</span></td>
+                <td>Ôn tập các bước xử lý khi tài khoản bị tấn công và ghi nhớ đầu mối hỗ trợ (GVCN, Tổng đài 111).</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+
+        <!-- Interactive AI Checklist Widget for Teachers -->
+        <div class="content-box highlight-green">
+          <h3 class="box-title">Công cụ tương tác: Checklist rà soát an toàn trước khi dùng AI</h3>
+          <p style="font-size: 0.88rem; color: #475569; margin-bottom: 0.75rem;">
+            Thầy/cô hãy tích chọn đủ 3 ô dưới đây trước khi gửi dữ liệu lên các nền tảng AI:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.92rem;">
+            <label style="cursor: pointer;"><input type="checkbox"> 1. Tôi đã xóa bỏ toàn bộ Họ tên thật, Mã định danh/CCCD, Ngày sinh của học sinh.</label>
+            <label style="cursor: pointer;"><input type="checkbox"> 2. Tôi đã xóa bỏ Số điện thoại, Địa chỉ nhà riêng, Hoàn cảnh gia đình trong văn bản.</label>
+            <label style="cursor: pointer;"><input type="checkbox"> 3. Tài liệu này không phải là đề thi chưa công bố hoặc văn bản nội bộ có dấu mật của trường.</label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 3: GÓC HỌC SINH ==================== -->
+      <section class="section-view" id="module-3">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 3 · Dành cho Học sinh</div>
+        </div>
+
+        <h2 class="section-heading">3. Góc học sinh – Lướt mạng thông minh & an toàn</h2>
+        <p class="section-sub">Bí kíp bảo vệ tài khoản, nhận diện lừa đảo game/mạng xã hội và sử dụng AI có trách nhiệm.</p>
+
+        <!-- 4 KHONG Principle -->
+        <div class="content-box highlight-blue" style="text-align: center; padding: 1.5rem;">
+          <h3 style="color: #1e3a8a; font-size: 1.25rem; margin-bottom: 0.5rem;">Khẩu hiệu hành động "4 KHÔNG" của Học sinh Lạng Sơn (Phần XIV.4)</h3>
+          <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.85rem;">
+            <span style="background: #ffffff; border: 2px solid #ef4444; color: #b91c1c; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 800; font-size: 0.95rem;">🚫 KHÔNG chia sẻ tùy tiện</span>
+            <span style="background: #ffffff; border: 2px solid #ef4444; color: #b91c1c; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 800; font-size: 0.95rem;">🚫 KHÔNG tin ngay</span>
+            <span style="background: #ffffff; border: 2px solid #ef4444; color: #b91c1c; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 800; font-size: 0.95rem;">🚫 KHÔNG nhấp ngay</span>
+            <span style="background: #ffffff; border: 2px solid #ef4444; color: #b91c1c; padding: 0.5rem 1rem; border-radius: 999px; font-weight: 800; font-size: 0.95rem;">🚫 KHÔNG cung cấp ngay</span>
+          </div>
+        </div>
+
+        <!-- 3 Student Guides -->
+        <div class="info-grid-3">
+          <div class="content-box">
+            <h4 class="box-title">🎮 Cảnh giác lừa đảo Game & Quà tặng</h4>
+            <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+              Kẻ gian thường tạo website giả mạo tặng <em>Kim cương, Quân huy, Robux</em> hoặc bình chọn cuộc thi để dụ học sinh nhập tài khoản và mã OTP. Tuyệt đối không đăng nhập vào link lạ!
+            </p>
+          </div>
+
+          <div class="content-box">
+            <h4 class="box-title">📱 Bảo mật Mạng xã hội & Mật khẩu</h4>
+            <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+              Không dùng ngày sinh hoặc SĐT làm mật khẩu. Bật xác thực 2 bước (2FA) trên Facebook, TikTok, Zalo, Google. Luôn đăng xuất khi dùng máy tính phòng Tin học.
+            </p>
+          </div>
+
+          <div class="content-box">
+            <h4 class="box-title">🤖 Dùng AI tạo ảnh & Chat an toàn</h4>
+            <p style="font-size: 0.88rem; color: #475569; line-height: 1.6;">
+              Không tải ảnh thẻ học sinh, CCCD, địa chỉ nhà hoặc khuôn mặt chụp cận cảnh lên các trào lưu tạo ảnh AI lạ để phòng tránh bị lừa đảo Deepfake mạo danh.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Password Simulator -->
+        <div class="content-box highlight-green">
+          <h3 class="box-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Công cụ tương tác: Thử nghiệm độ mạnh mật khẩu SAFE-LS
+          </h3>
+          <p style="font-size: 0.88rem; color: #475569; margin-bottom: 0.75rem;">
+            (Nhập một mật khẩu mẫu ngẫu nhiên để kiểm tra cấu trúc – Hệ thống an toàn tuyệt đối, không lưu trữ bất kỳ dữ liệu nào):
+          </p>
+          <div style="max-width: 480px;">
+            <input type="text" id="pwTesterInput" placeholder="Ví dụ: LangSon#2026@Safe" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; margin-bottom: 0.5rem;">
+            <div style="height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-bottom: 0.35rem;">
+              <div id="pwStrengthFill" style="height: 100%; width: 0%; transition: width 0.3s ease, background 0.3s ease;"></div>
+            </div>
+            <div id="pwStrengthText" style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Hãy nhập thử mật khẩu mẫu để kiểm tra</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 4: THỬ THÁCH TÌNH HUỐNG ==================== -->
+      <section class="section-view" id="module-4">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 4 · Tương tác trực tiếp</div>
+        </div>
+
+        <h2 class="section-heading">4. Thử thách tình huống ("Bạn sẽ làm gì?")</h2>
+        <p class="section-sub">Thực hành giải quyết các tình huống thực tế mô phỏng theo đề cương dự án. Bấm chọn đáp án để xem giải thích, nguy cơ và lời khuyên chuẩn.</p>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">Tất cả tình huống</button>
+          <button class="filter-btn" data-filter="data">1. Dữ liệu cá nhân</button>
+          <button class="filter-btn" data-filter="account">2. Mật khẩu & Tài khoản</button>
+          <button class="filter-btn" data-filter="phishing">3. Nhận diện Lừa đảo</button>
+          <button class="filter-btn" data-filter="ai">4. AI & Dữ liệu</button>
+        </div>
+
+        <!-- Scenarios List (Populated by JS) -->
+        <div id="scenariosContainer"></div>
+      </section>
+
+      <!-- ==================== VIEW 5: KHI CÓ SỰ CỐ ==================== -->
+      <section class="section-view" id="module-5">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 5 · Phản ứng khẩn cấp</div>
+        </div>
+
+        <h2 class="section-heading">5. Khi có sự cố – Quy trình ứng phó khẩn cấp (First Response)</h2>
+        <p class="section-sub">Quy trình 6 bước xử lý chuẩn theo Mô hình SAFE-LS và danh bạ các đầu mối báo cáo, tìm kiếm hỗ trợ.</p>
+
+        <!-- 6 Steps Emergency Flow -->
+        <div class="content-box highlight-red">
+          <h3 class="box-title" style="color: #991b1b;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Quy trình 6 bước ứng phó khi nghi ngờ lộ lọt dữ liệu hoặc tài khoản bị xâm nhập
+          </h3>
+          <div class="golden-rules-grid">
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">1</span>
+              <div><strong>Dừng ngay hành vi có nguy cơ:</strong> Đóng ngay trang web lạ, không click thêm link, không gửi thêm mã xác thực hay chuyển tiền.</div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">2</span>
+              <div><strong>Thay đổi thông tin bảo mật:</strong> Đổi ngay mật khẩu từ một thiết bị an toàn khác, đăng xuất khỏi tất cả các phiên đăng nhập lạ.</div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">3</span>
+              <div><strong>Kiểm tra hoạt động tài khoản:</strong> Rà soát email khôi phục, số điện thoại liên kết và hủy quyền các ứng dụng bên thứ ba khả nghi.</div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">4</span>
+              <div><strong>Lưu lại bằng chứng:</strong> Chụp ảnh màn hình tin nhắn, đường link, số điện thoại kẻ lừa đảo (không vội xóa tin nhắn).</div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">5</span>
+              <div><strong>Thông báo người có trách nhiệm:</strong> Học sinh báo ngay cho Cha Mẹ và Giáo viên chủ nhiệm; Giáo viên báo cáo Ban Giám hiệu nhà trường.</div>
+            </div>
+            <div class="rule-item">
+              <span class="rule-num" style="background: #dc2626;">6</span>
+              <div><strong>Tìm kiếm sự hỗ trợ chuyên môn:</strong> Liên hệ các đầu mối hỗ trợ an ninh mạng chính thức để được can thiệp kịp thời.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Hotlines Directory -->
+        <div class="content-box" style="background: #ffffff;">
+          <h3 class="box-title" style="color: #1e3a8a;">Danh bạ đầu mối hỗ trợ tại trường học & địa bàn tỉnh Lạng Sơn</h3>
+          <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 30%;">Đầu mối hỗ trợ</th>
+                <th style="width: 30%;">Kênh liên hệ</th>
+                <th>Phạm vi hỗ trợ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Giáo viên chủ nhiệm & Ban Giám hiệu</strong></td>
+                <td>Liên hệ trực tiếp tại trường học</td>
+                <td>Hỗ trợ ban đầu, tư vấn tâm lý, ngăn ngừa tin đồn giả mạo trong phạm vi lớp học và nhà trường.</td>
+              </tr>
+              <tr>
+                <td><strong>Tổng đài Quốc gia Bảo vệ Trẻ em</strong></td>
+                <td><strong style="color: #dc2626; font-size: 1.1rem;">111</strong> (Miễn phí cuộc gọi 24/7)</td>
+                <td>Tư vấn, bảo vệ trẻ em và học sinh khi bị bạo lực mạng, tống tiền, quấy rối hoặc xâm phạm đời tư.</td>
+              </tr>
+              <tr>
+                <td><strong>Phòng An ninh mạng (PA05) – Công an tỉnh Lạng Sơn</strong></td>
+                <td>Công an tỉnh Lạng Sơn</td>
+                <td>Xử lý các vụ việc lừa đảo công nghệ cao, chiếm đoạt tài sản, phát tán thông tin độc hại quy mô lớn.</td>
+              </tr>
+              <tr>
+                <td><strong>Cổng cảnh báo an toàn thông tin Việt Nam</strong></td>
+                <td><code>canhbao.khonggianmang.vn</code></td>
+                <td>Báo cáo các trang web lừa đảo (Phishing), mã độc và tin nhắn rác độc hại từ Cục An toàn thông tin.</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 6: KIỂM TRA & KHẢO SÁT ==================== -->
+      <section class="section-view" id="module-6">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 6 · Đo lường & Đánh giá</div>
+        </div>
+
+        <h2 class="section-heading">6. Kiểm tra kỹ năng & Khảo sát thực trạng</h2>
+        <p class="section-sub">Bộ công cụ đánh giá kỹ năng trước và sau tác động (Phần IV & Phụ lục 4) kèm phiếu khảo sát nghiên cứu.</p>
+
+        <!-- Mode Switcher -->
+        <div class="mode-tabs">
+          <div class="mode-tab active" data-mode="quiz">
+            🎯 Bài kiểm tra đánh giá kỹ năng (12 câu · Thang 4 mức)
+          </div>
+          <div class="mode-tab" data-mode="survey">
+            📋 Phiếu khảo sát thực trạng nghiên cứu (Phụ lục 1 & 2)
+          </div>
+        </div>
+
+        <!-- Tab 1: Quiz Evaluation -->
+        <div id="quizTestBox">
+          <div class="content-box highlight-blue" style="margin-bottom: 1.25rem;">
+            <div style="font-weight: 700; color: #1e3a8a; margin-bottom: 0.35rem;">Tiêu chuẩn đánh giá kỹ năng SAFE-LS (Phần IV.2):</div>
+            <div style="font-size: 0.88rem; color: #475569; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;">
+              <div>• <strong>Mức 1 – Chưa đạt</strong> (&lt; 50%): Chưa nhận diện/xử lý đúng.</div>
+              <div>• <strong>Mức 2 – Đạt một phần</strong> (50% - 69%): Nhận biết nhưng chưa đầy đủ.</div>
+              <div>• <strong>Mức 3 – Đạt</strong> (70% - 84%): Nhận diện và xử lý cơ bản tốt.</div>
+              <div>• <strong>Mức 4 – Thành thạo</strong> (≥ 85%): Phản ứng nhanh, đạt chuẩn SAFE-LS.</div>
+            </div>
+          </div>
+
+          <!-- Questions injected by JS -->
+          <div id="quizQuestionsContainer"></div>
+
+          <div style="text-align: center; margin-top: 1.5rem;">
+            <button class="primary-btn" onclick="submitQuiz()">
+              Hoàn thành & Xem Xếp loại Kỹ năng SAFE-LS
+            </button>
+          </div>
+
+          <!-- Result Display Box -->
+          <div id="quizResultBox" class="content-box" style="display: none; margin-top: 1.75rem; border: 2px solid #bfdbfe; background: #ffffff;"></div>
+        </div>
+
+        <!-- Tab 2: Research Survey (Likert 4 Scale) -->
+        <div id="surveyBox" style="display: none;">
+          <div class="content-box highlight-amber">
+            <h3 class="box-title">Phiếu khảo sát thực trạng kỹ năng bảo vệ dữ liệu cá nhân (Phụ lục 1 & 2)</h3>
+            <p style="font-size: 0.88rem; color: #475569; margin-bottom: 1rem;">
+              Thầy/cô và học sinh lựa chọn mức độ từ <strong>1 (Chưa biết)</strong> đến <strong>4 (Biết rõ)</strong> theo các tiêu chí dưới đây để phục vụ thu thập dữ liệu nghiên cứu:
+            </p>
+
+            <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nội dung khảo sát nhận thức & kỹ năng</th>
+                  <th style="width: 35%; text-align: center;">Mức độ tự đánh giá (1 - 4)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1. Khả năng nhận diện thông tin cá nhân cần bảo vệ trong trường học</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_1" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_1" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_1" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_1" value="4"> 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2. Ý thức không chia sẻ mật khẩu và bảo vệ mã OTP</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_2" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_2" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_2" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_2" value="4"> 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3. Kỹ năng nhận diện đường link độc hại và tin nhắn lừa đảo</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_3" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_3" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_3" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_3" value="4"> 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>4. Kiểm tra quyền riêng tư và quyền truy cập ứng dụng mạng xã hội</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_4" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_4" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_4" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_4" value="4"> 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5. Không đưa dữ liệu cá nhân/học sinh vào các công cụ AI (ChatGPT, Gemini)</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_5" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_5" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_5" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_5" value="4"> 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>6. Biết rõ các bước xử lý và đầu mối báo cáo (GVCN, BGH, Tổng đài 111) khi có sự cố</td>
+                  <td style="text-align: center;">
+                    <label><input type="radio" name="s_6" value="1"> 1</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_6" value="2"> 2</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_6" value="3"> 3</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="s_6" value="4"> 4</label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.25rem;">
+              <button class="primary-btn" onclick="alert('Đã ghi nhận dữ liệu khảo sát thành công! Dữ liệu được mã hóa và tổng hợp phục vụ báo cáo đề tài SAFE-LS.')">
+                💾 Gửi Phiếu Khảo Sát Nghiên Cứu
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- QR Code Modal (Accessible from Hero Banner) -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-card">
+      <h3 style="font-size: 1.2rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.35rem;">MÃ QR TRUY CẬP CỔNG SAFE-LS</h3>
+      <p style="font-size: 0.86rem; color: #64748b; margin-bottom: 0.5rem;">Quét bằng camera điện thoại hoặc Zalo để mở cổng thông tin</p>
+      
+      <div class="qr-box">
+        <img id="qrImageDisplay" src="" alt="SAFE-LS QR Code" style="width: 180px; height: 180px; display: block;">
+      </div>
+
+      <div style="background: #f1f5f9; padding: 0.65rem; border-radius: 8px; font-size: 0.82rem; color: #334155; word-break: break-all; margin-bottom: 1.25rem;">
+        <span id="qrUrlText">Đang tạo đường link...</span>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; justify-content: center;">
+        <button class="primary-btn" onclick="navigator.clipboard.writeText(window.location.href); alert('Đã sao chép đường link!');">
+          📋 Sao chép Link
+        </button>
+        <button class="secondary-btn" id="closeQrBtn">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
