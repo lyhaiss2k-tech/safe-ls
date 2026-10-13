@@ -537,9 +537,11 @@ function doGet(e) {
       }
     }
 
+    const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+
     // Google Sheets Config
     function loadGSheetConfig() {
-      const url = localStorage.getItem('safels_gsheet_url') || '';
+      const url = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
       document.getElementById('gsheetUrlInput').value = url;
       if (url) {
         document.getElementById('gsheetStatusText').innerHTML = `✅ Đã kết nối với Webhook: <code style="word-break: break-all;">${url}</code>`;
@@ -549,13 +551,13 @@ function doGet(e) {
 
     function saveGSheetUrl() {
       const url = document.getElementById('gsheetUrlInput').value.trim();
-      localStorage.setItem('safels_gsheet_url', url);
+      localStorage.setItem('safels_gsheet_url', url || DEFAULT_GSHEET_WEBHOOK_URL);
       loadGSheetConfig();
       syncDataFromGSheet(false);
     }
 
     async function syncDataFromGSheet(silent = false) {
-      const url = localStorage.getItem('safels_gsheet_url');
+      const url = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
       if (!url) {
         if (!silent) alert('Bạn chưa cấu hình URL Google Sheets! Vui lòng vào tab "Cấu hình Google Sheets" để lưu URL Webhook.');
         return;

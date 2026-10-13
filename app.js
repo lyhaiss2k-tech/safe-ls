@@ -1186,9 +1186,11 @@ function saveSubmissionLocally(data) {
   }
 }
 
+const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+
 // Hàm gửi dữ liệu sang Google Sheets Webhook
 async function sendToGoogleSheet(data) {
-  const webhookUrl = localStorage.getItem('safels_gsheet_url') || '';
+  const webhookUrl = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
   if (!webhookUrl) return false;
 
   try {
