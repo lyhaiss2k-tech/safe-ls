@@ -384,10 +384,8 @@ function setupEventListeners() {
 // Generate Scannable QR Code
 function generateQRCode() {
   let currentUrl = window.location.href;
-  if (currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
-    // Ưu tiên đường link công khai để điện thoại quét mã QR vào được ngay
-    currentUrl = 'https://fd4e2b41744a0b.lhr.life';
-  }
+    // Đường link chính thức trên Vercel để quét mã QR truy cập
+    currentUrl = 'https://safe-ls.vercel.app';
   const qrImg = document.getElementById('qrImageDisplay');
   const qrText = document.getElementById('qrUrlText');
   
