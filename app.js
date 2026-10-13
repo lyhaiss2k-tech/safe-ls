@@ -478,7 +478,7 @@ const studentQuizQuestions = [
   }
 ];
 
-// --- 3. BỘ 12 TÌNH HUỐNG THỰC HÀNH MÔ PHỎNG (SCENARIO SIMULATOR) ---
+// --- 3. BỘ TÌNH HUỐNG THỰC HÀNH MÔ PHỎNG (SCENARIO SIMULATOR CHO GIÁO VIÊN VÀ HỌC SINH) ---
 const scenariosData = [
   {
     id: 1,
@@ -501,7 +501,7 @@ const scenariosData = [
     group: 'account',
     groupName: 'Mật khẩu & Tài khoản',
     target: 'teacher',
-    question: 'Tình huống 2: Một người tự xưng là nhân viên kỹ thuật hỗ trợ hệ thống giáo dục gửi tin nhắn yêu cầu thầy/cô cung cấp mã xác thực OTP gửi về điện thoại để "nâng cấp tài khoản giảng dạy". Thầy/cô sẽ:',
+    question: 'Tình huống 2 (GV): Một người tự xưng là nhân viên kỹ thuật hỗ trợ hệ thống giáo dục gửi tin nhắn yêu cầu thầy/cô cung cấp mã xác thực OTP gửi về điện thoại để "nâng cấp tài khoản giảng dạy". Thầy/cô sẽ:',
     options: [
       { text: 'A. Cung cấp ngay để tránh tài khoản giảng dạy bị khóa hoặc gián đoạn.', isCorrect: false },
       { text: 'B. Hỏi thêm một vài câu rồi chụp màn hình gửi mã OTP cho họ.', isCorrect: false },
@@ -517,7 +517,7 @@ const scenariosData = [
     group: 'ai',
     groupName: 'AI & Dữ liệu',
     target: 'all',
-    question: 'Tình huống 3: Bạn đang sử dụng công cụ AI (như ChatGPT/Gemini) để nhờ tóm tắt bảng điểm, hồ sơ học sinh hoặc phân tích một tài liệu nội bộ của trường. Bạn nên làm gì trước khi tải lên?',
+    question: 'Tình huống 3: Bạn đang sử dụng công cụ AI (như ChatGPT/Gemini) để nhờ tóm tắt tài liệu, bảng điểm hoặc văn bản học tập. Bạn nên làm gì trước khi tải lên?',
     options: [
       { text: 'A. Tải toàn bộ file lên ngay vì AI có chế độ bảo mật tự động.', isCorrect: false },
       { text: 'B. Dừng lại, kiểm tra và chủ động xóa/ẩn toàn bộ họ tên, ngày sinh, SĐT, địa chỉ trước khi đưa vào AI.', isCorrect: true },
@@ -533,7 +533,7 @@ const scenariosData = [
     group: 'phishing',
     groupName: 'Nhận diện Lừa đảo',
     target: 'student',
-    question: 'Tình huống 4: Bạn nhận được đường link qua Facebook/Zalo từ một người bạn với nội dung: "Bình chọn cho tớ tham gia cuộc thi này nhé, chỉ cần đăng nhập tài khoản Google/Facebook là xong". Bạn sẽ:',
+    question: 'Tình huống 4 (HS): Bạn nhận được đường link qua Facebook/Zalo từ một người bạn với nội dung: "Bình chọn cho tớ tham gia cuộc thi này nhé, chỉ cần đăng nhập tài khoản Google/Facebook là xong". Bạn sẽ:',
     options: [
       { text: 'A. Bấm vào link và đăng nhập ngay để ủng hộ bạn mình.', isCorrect: false },
       { text: 'B. Kiểm tra kỹ tên miền (URL), không nhập thông tin đăng nhập và gọi điện xác nhận lại với bạn bè xem có bị hack nick không.', isCorrect: true },
@@ -549,7 +549,7 @@ const scenariosData = [
     group: 'data',
     groupName: 'Dữ liệu cá nhân',
     target: 'teacher',
-    question: 'Tình huống 5: Sau một hoạt động tập thể sôi nổi của lớp, giáo viên muốn đăng ảnh kỷ niệm lên mạng xã hội. Tuy nhiên trong ảnh có góc chụp bảng thông báo dán danh sách tên, điểm số và số điện thoại phụ huynh. Cách xử lý đúng là:',
+    question: 'Tình huống 5 (GV): Sau một hoạt động tập thể sôi nổi của lớp, giáo viên muốn đăng ảnh kỷ niệm lên mạng xã hội. Tuy nhiên trong ảnh có góc chụp bảng thông báo dán danh sách tên, điểm số và số điện thoại phụ huynh. Cách xử lý đúng là:',
     options: [
       { text: 'A. Cứ đăng lên vì hoạt động tập thể rất ý nghĩa, ít ai để ý đến góc bảng.', isCorrect: false },
       { text: 'B. Cắt cúp (crop) ảnh hoặc làm mờ (blur) hoàn toàn phần bảng có thông tin danh sách trước khi đăng.', isCorrect: true },
@@ -565,7 +565,7 @@ const scenariosData = [
     group: 'phishing',
     groupName: 'Nhận diện Lừa đảo',
     target: 'student',
-    question: 'Tình huống 6: Một học sinh nhận được lời mời tham gia sự kiện "Nhận 1000 quân huy / Kim cương game miễn phí" với yêu cầu nhập tài khoản Facebook và mã OTP gửi về máy. Học sinh nên làm gì?',
+    question: 'Tình huống 6 (HS): Một học sinh nhận được lời mời tham gia sự kiện "Nhận 1000 quân huy / Kim cương game miễn phí" với yêu cầu nhập tài khoản Facebook và mã OTP gửi về máy. Học sinh nên làm gì?',
     options: [
       { text: 'A. Nhập nhanh vì sự kiện sắp hết giờ.', isCorrect: false },
       { text: 'B. Tuyệt đối không nhập, nhận diện đây là chiêu trò lừa đảo chiếm đoạt tài khoản và cảnh báo cho bạn bè.', isCorrect: true },
@@ -597,7 +597,7 @@ const scenariosData = [
     group: 'ai',
     groupName: 'AI & Dữ liệu',
     target: 'student',
-    question: 'Tình huống 8: Một trào lưu trên TikTok/Facebook rủ học sinh tải ảnh chân dung cận cảnh và ảnh căn cước công dân lên một ứng dụng AI nước ngoài để "tạo video hoạt hình tương lai". Bạn sẽ:',
+    question: 'Tình huống 8 (HS): Một trào lưu trên TikTok/Facebook rủ học sinh tải ảnh chân dung cận cảnh và ảnh căn cước công dân lên một ứng dụng AI nước ngoài để "tạo video hoạt hình tương lai". Bạn sẽ:',
     options: [
       { text: 'A. Tải ảnh lên ngay để bắt kịp xu hướng trào lưu.', isCorrect: false },
       { text: 'B. Từ chối tham gia và cảnh báo bạn bè vì nguy cơ dữ liệu sinh trắc học khuôn mặt và giấy tờ tùy thân bị đánh cắp.', isCorrect: true },
@@ -613,7 +613,7 @@ const scenariosData = [
     group: 'phishing',
     groupName: 'Nhận diện Lừa đảo',
     target: 'teacher',
-    question: 'Tình huống 9: Giáo viên nhận được một cuộc gọi thông báo: "Con của thầy/cô (hoặc học sinh trong lớp) bị tai nạn giao thông đang cấp cứu tại Bệnh viện đa khoa tỉnh, yêu cầu chuyển gấp viện phí 20 triệu đồng vào tài khoản viện phí khẩn cấp". Giáo viên xử lý thế nào?',
+    question: 'Tình huống 9 (GV): Giáo viên nhận được một cuộc gọi thông báo: "Con của thầy/cô (hoặc học sinh trong lớp) bị tai nạn giao thông đang cấp cứu tại Bệnh viện đa khoa tỉnh, yêu cầu chuyển gấp viện phí 20 triệu đồng vào tài khoản viện phí khẩn cấp". Giáo viên xử lý thế nào?',
     options: [
       { text: 'A. Hoảng loạn chuyển tiền ngay lập tức để kịp cứu người.', isCorrect: false },
       { text: 'B. Giữ bình tĩnh, không chuyển tiền; lập tức gọi điện cho nhà trường/gia đình học sinh hoặc bệnh viện qua số hotline chính thức để xác minh.', isCorrect: true },
@@ -627,7 +627,7 @@ const scenariosData = [
     group: 'data',
     groupName: 'Dữ liệu cá nhân',
     target: 'student',
-    question: 'Tình huống 10: Trong giờ ra chơi, một bạn trong lớp để quên điện thoại trên bàn không khóa màn hình. Bạn khác rủ em mở điện thoại bạn lên xem trộm tin nhắn Zalo và ảnh riêng tư. Em sẽ:',
+    question: 'Tình huống 10 (HS): Trong giờ ra chơi, một bạn trong lớp để quên điện thoại trên bàn không khóa màn hình. Bạn khác rủ em mở điện thoại bạn lên xem trộm tin nhắn Zalo và ảnh riêng tư. Em sẽ:',
     options: [
       { text: 'A. Cùng xem trộm và chụp lại để trêu bạn.', isCorrect: false },
       { text: 'B. Từ chối và nhắc nhở bạn không được xem trộm vì đó là xâm phạm quyền riêng tư, sau đó hỗ trợ cất điện thoại an toàn cho bạn.', isCorrect: true },
@@ -641,7 +641,7 @@ const scenariosData = [
     group: 'account',
     groupName: 'Mật khẩu & Tài khoản',
     target: 'teacher',
-    question: 'Tình huống 11: Để tiện cho việc phụ đạo học sinh, giáo viên muốn lập một nhóm Zalo/Telegram. Để bảo đảm an toàn dữ liệu, giáo viên nên thiết lập như thế nào?',
+    question: 'Tình huống 11 (GV): Để tiện cho việc phụ đạo học sinh, giáo viên muốn lập một nhóm Zalo/Telegram. Để bảo đảm an toàn dữ liệu, giáo viên nên thiết lập như thế nào?',
     options: [
       { text: 'A. Mở link tham gia nhóm công khai để bất kỳ ai trên mạng cũng có thể tự do bấm vào tham gia.', isCorrect: false },
       { text: 'B. Bật tính năng phê duyệt thành viên của trưởng nhóm, chỉ cho phép đúng phụ huynh/học sinh trong danh sách tham gia.', isCorrect: true },
@@ -663,12 +663,77 @@ const scenariosData = [
       { text: 'D. Gọi lại số điện thoại đó để chửi bới.', isCorrect: false }
     ],
     explanation: 'Các cơ quan nhà nước và ngân hàng chỉ dùng tên miền chính thống (đuôi .gov.vn hoặc .vn), không bao giờ dùng tên miền quốc tế (.net, .xyz, .top) để yêu cầu đăng nhập.'
+  },
+  {
+    id: 13,
+    group: 'data',
+    groupName: 'Dữ liệu cá nhân',
+    target: 'teacher',
+    question: 'Tình huống 13 (GV): Thầy/cô cần nén file hoặc chuyển đổi danh sách học sinh nhận trợ cấp/hộ nghèo từ Word sang PDF. Một số trang web miễn phí trên mạng có tính năng này. Thầy/cô nên làm gì?',
+    options: [
+      { text: 'A. Tải trực tiếp cả file lên trang web miễn phí vì thao tác rất nhanh chóng và tiện lợi.', isCorrect: false },
+      { text: 'B. Tuyệt đối không tải văn bản chứa thông tin cá nhân học sinh lên các website đổi file trôi nổi; nên dùng tính năng "Lưu dưới dạng PDF" (Save As PDF) có sẵn trong Microsoft Word trên máy tính.', isCorrect: true },
+      { text: 'C. Đổi tên file trước rồi tải lên là hoàn toàn an toàn.', isCorrect: false },
+      { text: 'D. Dùng trình duyệt ẩn danh để nén file.', isCorrect: false }
+    ],
+    explanation: 'Các công cụ chuyển đổi file miễn phí trực tuyến có thể sao lưu dữ liệu văn bản vào máy chủ của họ, dẫn tới rò rỉ danh sách và hoàn cảnh nhạy cảm của học sinh.',
+    risk: 'Lộ dữ liệu cá nhân nhạy cảm của học sinh ra Internet, vi phạm Luật Bảo vệ DLCN số 91/2025/QH15.',
+    bestAction: 'Ưu tiên xử lý tài liệu nội bộ offline bằng phần mềm văn phòng có sẵn trên máy tính.'
+  },
+  {
+    id: 14,
+    group: 'ai',
+    groupName: 'AI & Dữ liệu',
+    target: 'teacher',
+    question: 'Tình huống 14 (GV): Thầy/cô muốn dùng ChatGPT để gợi ý các lời nhận xét học bạ phong phú cho 40 học sinh trong lớp. Cách làm nào sau đây là AN TOÀN VÀ ĐÚNG CHUẨN NHẤT?',
+    options: [
+      { text: 'A. Sao chép toàn bộ bảng Excel gồm: Họ tên, Ngày sinh, Điểm số, Đánh giá đạo đức vào prompt của ChatGPT.', isCorrect: false },
+      { text: 'B. Ẩn danh hóa dữ liệu: Chỉ nhập dạng "Học sinh A: chăm chỉ, điểm Toán 8.5, cần rèn thêm kỹ năng thuyết trình" và yêu cầu AI gợi ý nhận xét chung, sau đó thầy/cô tự ghép vào sổ điểm.', isCorrect: true },
+      { text: 'C. Chụp ảnh học bạ tải lên cho AI đọc nhận diện ký tự (OCR).', isCorrect: false },
+      { text: 'D. Không nên dùng AI dưới mọi hình thức vì bị cấm hoàn toàn.', isCorrect: false }
+    ],
+    explanation: 'Giáo viên hoàn toàn có thể ứng dụng AI để nâng cao hiệu suất làm việc, miễn là tuân thủ nguyên tắc ẩn danh hóa: Tuyệt đối không đưa họ tên và dữ liệu định danh của học sinh vào mô hình AI.',
+    risk: 'Dữ liệu học bạ và danh tính học sinh bị nhà cung cấp AI lưu trữ hoặc dùng để huấn luyện mô hình công cộng.',
+    bestAction: 'Ứng dụng AI thông minh: Giữ ý tưởng – Ẩn danh dữ liệu cá nhân.'
+  },
+  {
+    id: 15,
+    group: 'data',
+    groupName: 'Dữ liệu cá nhân',
+    target: 'student',
+    question: 'Tình huống 15 (HS): Một tài khoản lạ trên Facebook nhắn tin khen em có ngoại hình đẹp, ngỏ ý mời em tham gia "Dự án người mẫu học đường" với thù lao 5 triệu đồng, yêu cầu em gửi ảnh chân dung, ảnh toàn thân và chụp 2 mặt CCCD để "làm hồ sơ bảo hiểm". Em sẽ:',
+    options: [
+      { text: 'A. Chụp gửi ngay vì cơ hội kiếm tiền và nổi tiếng rất hấp dẫn.', isCorrect: false },
+      { text: 'B. Cảnh giác với chiêu trò thu thập hình ảnh và CCCD để lừa đảo hoặc tống tiền; không gửi thông tin và báo ngay cho bố mẹ/thầy cô.', isCorrect: true },
+      { text: 'C. Chỉ gửi ảnh toàn thân nhưng không gửi CCCD.', isCorrect: false },
+      { text: 'D. Giấu bố mẹ và tự đi gặp người đó theo địa chỉ hẹn.', isCorrect: false }
+    ],
+    explanation: 'Đây là cạm bẫy dụ dỗ phổ biến nhắm vào học sinh để thu thập hình ảnh nhạy cảm và căn cước công dân nhằm tống tiền, bôi nhọ hoặc đăng ký tài khoản tín dụng đen.',
+    risk: 'Nguy cơ bị xâm hại danh dự, tống tiền hoặc bị lợi dụng thông tin CCCD vào các đường dây lừa đảo.',
+    bestAction: 'Khắc ghi: Tuyệt đối không cung cấp hình ảnh riêng tư và CCCD cho người lạ trên mạng.'
+  },
+  {
+    id: 16,
+    group: 'account',
+    groupName: 'Mật khẩu & Tài khoản',
+    target: 'student',
+    question: 'Tình huống 16 (HS): Một người bạn thân cùng lớp mượn tài khoản và mật khẩu Facebook của em với lý do: "Cho tớ mượn nick 10 phút để vào xem trang cá nhân một bạn khác do nick tớ bị chặn". Em xử lý thế nào?',
+    options: [
+      { text: 'A. Đưa ngay mật khẩu vì bạn bè thân thiết nên tin tưởng tuyệt đối.', isCorrect: false },
+      { text: 'B. Từ chối khéo léo và giải thích rằng tài khoản cá nhân phải tự bảo mật; em có thể ngồi cùng để mở giúp bạn xem thông tin nếu hợp lý.', isCorrect: true },
+      { text: 'C. Đổi mật khẩu thành dãy số dễ nhớ rồi đọc cho bạn, sau đó không đổi lại.', isCorrect: false },
+      { text: 'D. Đọc cả mã xác thực 2 lớp (2FA) gửi về máy cho bạn.', isCorrect: false }
+    ],
+    explanation: 'Mật khẩu và tài khoản mạng xã hội là bí mật riêng tư cá nhân. Cho mượn tài khoản có thể dẫn đến việc bạn bè vô tình làm lộ nick hoặc dùng nick của em gây hiểu lầm, tranh cãi.',
+    risk: 'Mất quyền kiểm soát tài khoản cá nhân, rò rỉ tin nhắn riêng tư và dễ nảy sinh mâu thuẫn học đường.',
+    bestAction: 'Tài khoản là cá nhân – Tuyệt đối không chia sẻ mật khẩu cho bất kỳ ai!'
   }
 ];
 
 // --- 4. APP STATE ---
 let currentView = 'home';
 let currentScenarioFilter = 'all';
+let currentScenarioRole = 'teacher'; // 'teacher' hoặc 'student'
 let currentTargetRole = 'teacher'; // 'teacher' hoặc 'student'
 let currentActiveQuestions = teacherQuizQuestions;
 let quizAnswers = {};
@@ -824,21 +889,60 @@ function generateQRCode() {
   }
 }
 
-// Render 12 tình huống mô phỏng
+// Chuyển đổi đối tượng tình huống (Giáo viên vs Học sinh)
+window.switchScenarioRole = function(role) {
+  currentScenarioRole = role;
+  const teacherBtn = document.getElementById('scenarioRoleTeacher');
+  const studentBtn = document.getElementById('scenarioRoleStudent');
+  const infoText = document.getElementById('scenarioRoleInfoText');
+
+  if (role === 'teacher') {
+    if (teacherBtn) teacherBtn.classList.add('active');
+    if (studentBtn) studentBtn.classList.remove('active');
+    if (infoText) {
+      infoText.innerHTML = `🎓 <em>Các tình huống nghiệp vụ thực tế của Giáo viên: xử lý bảng điểm, ảnh lớp, dùng AI nhận xét học sinh, cuộc gọi mạo danh, tài khoản quản lý giáo dục...</em>`;
+    }
+  } else {
+    if (teacherBtn) teacherBtn.classList.remove('active');
+    if (studentBtn) studentBtn.classList.add('active');
+    if (infoText) {
+      infoText.innerHTML = `🎒 <em>Các tình huống học đường & mạng xã hội của Học sinh: bẫy game nhận quà, link bình chọn giả, trào lưu AI, quyền riêng tư và bạo lực mạng...</em>`;
+    }
+  }
+
+  renderScenarios();
+};
+
+// Render các tình huống mô phỏng theo đối tượng và chuyên mục
 function renderScenarios() {
   const container = document.getElementById('scenariosContainer');
   if (!container) return;
 
   const filtered = scenariosData.filter(s => {
+    // 1. Lọc theo đối tượng (Giáo viên vs Học sinh)
+    const matchRole = (s.target === currentScenarioRole || s.target === 'all');
+    if (!matchRole) return false;
+
+    // 2. Lọc theo danh mục
     if (currentScenarioFilter === 'all') return true;
     return s.group === currentScenarioFilter;
   });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 2.5rem 1rem; color: #64748b; background: #ffffff; border-radius: 12px; border: 1px dashed #cbd5e1; margin-top: 1rem;">
+        <p style="font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;">Chưa có tình huống trong danh mục này cho đối tượng đã chọn.</p>
+        <p style="font-size: 0.88rem;">Vui lòng bấm chọn <strong>"Tất cả tình huống"</strong> ở thanh lọc phía trên để trải nghiệm.</p>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = filtered.map(s => `
     <div class="scenario-card" id="scenario-${s.id}">
       <div class="scenario-meta">
         <span class="badge-tag">${s.groupName}</span>
-        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Đối tượng: ${s.target === 'teacher' ? 'Giáo viên' : (s.target === 'student' ? 'Học sinh' : 'Cả GV & HS')}</span>
+        <span style="font-size: 0.82rem; color: #1e40af; font-weight: 700;">Đối tượng: ${s.target === 'teacher' ? '🎓 Giáo viên' : (s.target === 'student' ? '🎒 Học sinh' : '👥 Cả GV & HS')}</span>
       </div>
       <div class="scenario-question">${s.question}</div>
       <div class="options-list">

@@ -28,9 +28,9 @@
         <button class="nav-pill" data-target="module-1">1. Thư viện</button>
         <button class="nav-pill" data-target="module-2">2. Góc giáo viên</button>
         <button class="nav-pill" data-target="module-3">3. Góc học sinh</button>
-        <button class="nav-pill" data-target="module-4">4. Tình huống</button>
-        <button class="nav-pill" data-target="module-5">5. Khi có sự cố</button>
-        <button class="nav-pill" data-target="module-6">6. Kiểm tra & Khảo sát</button>
+        <button class="nav-pill" data-target="module-4">4. Khi có sự cố</button>
+        <button class="nav-pill" data-target="module-5">5. Tình huống</button>
+        <button class="nav-pill" data-target="module-6">6. Kiểm tra kỹ năng</button>
       </nav>
     </div>
   </header>
@@ -137,14 +137,16 @@
             <div>
               <div class="card-icon-wrap">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
               </div>
-              <h3 class="card-title">4. Thử thách tình huống</h3>
-              <p class="card-desc">Câu hỏi tương tác, lựa chọn cách xử lý và giải thích đáp án.</p>
+              <h3 class="card-title">4. Khi có sự cố</h3>
+              <p class="card-desc">Các bước ứng phó và đầu mối cần báo cáo, tìm kiếm hỗ trợ.</p>
             </div>
             <div class="card-footer-link">
-              <span>Thực hành tình huống</span>
+              <span>Quy trình ứng phó</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </div>
           </div>
@@ -154,16 +156,14 @@
             <div>
               <div class="card-icon-wrap">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                  <line x1="12" y1="9" x2="12" y2="13"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
               </div>
-              <h3 class="card-title">5. Khi có sự cố</h3>
-              <p class="card-desc">Các bước ứng phó và đầu mối cần báo cáo, tìm kiếm hỗ trợ.</p>
+              <h3 class="card-title">5. Thử thách tình huống</h3>
+              <p class="card-desc">Câu hỏi tương tác, lựa chọn cách xử lý và giải thích đáp án.</p>
             </div>
             <div class="card-footer-link">
-              <span>Quy trình ứng phó</span>
+              <span>Thực hành tình huống</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </div>
           </div>
@@ -483,37 +483,14 @@
         </div>
       </section>
 
-      <!-- ==================== VIEW 4: THỬ THÁCH TÌNH HUỐNG ==================== -->
+      <!-- ==================== VIEW 4: KHI CÓ SỰ CỐ ==================== -->
       <section class="section-view" id="module-4">
         <div class="section-header-bar">
           <button class="back-btn">← Quay lại Trang chủ</button>
-          <div class="badge-tag">Chuyên mục 4 · Tương tác trực tiếp</div>
+          <div class="badge-tag">Chuyên mục 4 · Phản ứng khẩn cấp</div>
         </div>
 
-        <h2 class="section-heading">4. Thử thách tình huống ("Bạn sẽ làm gì?")</h2>
-        <p class="section-sub">Thực hành giải quyết các tình huống thực tế mô phỏng theo đề cương dự án. Bấm chọn đáp án để xem giải thích, nguy cơ và lời khuyên chuẩn.</p>
-
-        <!-- Filter Bar -->
-        <div class="filter-bar">
-          <button class="filter-btn active" data-filter="all">Tất cả tình huống</button>
-          <button class="filter-btn" data-filter="data">1. Dữ liệu cá nhân</button>
-          <button class="filter-btn" data-filter="account">2. Mật khẩu & Tài khoản</button>
-          <button class="filter-btn" data-filter="phishing">3. Nhận diện Lừa đảo</button>
-          <button class="filter-btn" data-filter="ai">4. AI & Dữ liệu</button>
-        </div>
-
-        <!-- Scenarios List (Populated by JS) -->
-        <div id="scenariosContainer"></div>
-      </section>
-
-      <!-- ==================== VIEW 5: KHI CÓ SỰ CỐ ==================== -->
-      <section class="section-view" id="module-5">
-        <div class="section-header-bar">
-          <button class="back-btn">← Quay lại Trang chủ</button>
-          <div class="badge-tag">Chuyên mục 5 · Phản ứng khẩn cấp</div>
-        </div>
-
-        <h2 class="section-heading">5. Khi có sự cố – Quy trình ứng phó khẩn cấp (First Response)</h2>
+        <h2 class="section-heading">4. Khi có sự cố – Quy trình ứng phó khẩn cấp (First Response)</h2>
         <p class="section-sub">Quy trình 6 bước xử lý chuẩn theo Mô hình SAFE-LS và danh bạ các đầu mối báo cáo, tìm kiếm hỗ trợ.</p>
 
         <!-- 6 Steps Emergency Flow -->
@@ -589,6 +566,47 @@
         </div>
       </section>
 
+      <!-- ==================== VIEW 5: THỬ THÁCH TÌNH HUỐNG ==================== -->
+      <section class="section-view" id="module-5">
+        <div class="section-header-bar">
+          <button class="back-btn">← Quay lại Trang chủ</button>
+          <div class="badge-tag">Chuyên mục 5 · Tương tác trực tiếp</div>
+        </div>
+
+        <h2 class="section-heading">5. Thử thách tình huống ("Bạn sẽ làm gì?")</h2>
+        <p class="section-sub">Thực hành giải quyết các tình huống thực tế mô phỏng theo đề cương dự án. Bấm chọn đáp án để xem giải thích, nguy cơ và lời khuyên chuẩn.</p>
+
+        <!-- Role Selector for Scenarios (Teacher vs Student) -->
+        <div class="content-box" style="background: #ffffff; border: 2px solid #bfdbfe; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.65rem; font-size: 1rem;">
+            Chọn đối tượng trải nghiệm tình huống:
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="filter-btn active" id="scenarioRoleTeacher" onclick="switchScenarioRole('teacher')">
+              🎓 Tình huống Giáo viên
+            </button>
+            <button class="filter-btn" id="scenarioRoleStudent" onclick="switchScenarioRole('student')">
+              🎒 Tình huống Học sinh
+            </button>
+          </div>
+          <div id="scenarioRoleInfoText" style="margin-top: 0.65rem; font-size: 0.88rem; color: #1e3a8a;">
+            🎓 <em>Các tình huống nghiệp vụ thực tế của Giáo viên: xử lý bảng điểm, ảnh lớp, dùng AI nhận xét học sinh, cuộc gọi mạo danh...</em>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">Tất cả tình huống</button>
+          <button class="filter-btn" data-filter="data">1. Dữ liệu cá nhân</button>
+          <button class="filter-btn" data-filter="account">2. Mật khẩu & Tài khoản</button>
+          <button class="filter-btn" data-filter="phishing">3. Nhận diện Lừa đảo</button>
+          <button class="filter-btn" data-filter="ai">4. AI & Dữ liệu</button>
+        </div>
+
+        <!-- Scenarios List (Populated by JS) -->
+        <div id="scenariosContainer"></div>
+      </section>
+
       <!-- ==================== VIEW 6: KIỂM TRA & KHẢO SÁT ==================== -->
       <section class="section-view" id="module-6">
         <div class="section-header-bar">
@@ -596,18 +614,8 @@
           <div class="badge-tag">Chuyên mục 6 · Đo lường & Đánh giá</div>
         </div>
 
-        <h2 class="section-heading">6. Kiểm tra kỹ năng & Khảo sát thực trạng</h2>
-        <p class="section-sub">Bộ công cụ đánh giá kỹ năng trước và sau tác động (Phần IV & Phụ lục 4) kèm phiếu khảo sát nghiên cứu.</p>
-
-        <!-- Mode Switcher -->
-        <div class="mode-tabs">
-          <div class="mode-tab active" data-mode="quiz">
-            🎯 Bài kiểm tra đánh giá kỹ năng (12 câu · Thang 4 mức)
-          </div>
-          <div class="mode-tab" data-mode="survey">
-            📋 Phiếu khảo sát thực trạng nghiên cứu (Phụ lục 1 & 2)
-          </div>
-        </div>
+        <h2 class="section-heading">6. Kiểm tra & Đánh giá kỹ năng SAFE-LS</h2>
+        <p class="section-sub">Bộ công cụ đánh giá kỹ năng bảo vệ dữ liệu cá nhân (18 câu chuyên sâu riêng biệt cho Giáo viên và Học sinh theo thang 4 mức độ).</p>
 
         <!-- Tab 1: Quiz Evaluation -->
         <div id="quizTestBox">
@@ -661,100 +669,20 @@
           <!-- Result Display Box -->
           <div id="quizResultBox" class="content-box" style="display: none; margin-top: 1.75rem; border: 2px solid #bfdbfe; background: #ffffff;"></div>
         </div>
-
-        <!-- Tab 2: Research Survey (Likert 4 Scale) -->
-        <div id="surveyBox" style="display: none;">
-          <div class="content-box highlight-amber">
-            <h3 class="box-title">Phiếu khảo sát thực trạng kỹ năng bảo vệ dữ liệu cá nhân (Phụ lục 1 & 2)</h3>
-            <p style="font-size: 0.88rem; color: #475569; margin-bottom: 1rem;">
-              Thầy/cô và học sinh lựa chọn mức độ từ <strong>1 (Chưa biết)</strong> đến <strong>4 (Biết rõ)</strong> theo các tiêu chí dưới đây để phục vụ thu thập dữ liệu nghiên cứu:
-            </p>
-
-            <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Nội dung khảo sát nhận thức & kỹ năng</th>
-                  <th style="width: 35%; text-align: center;">Mức độ tự đánh giá (1 - 4)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1. Khả năng nhận diện thông tin cá nhân cần bảo vệ trong trường học</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_1" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_1" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_1" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_1" value="4"> 4</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>2. Ý thức không chia sẻ mật khẩu và bảo vệ mã OTP</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_2" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_2" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_2" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_2" value="4"> 4</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3. Kỹ năng nhận diện đường link độc hại và tin nhắn lừa đảo</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_3" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_3" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_3" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_3" value="4"> 4</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4. Kiểm tra quyền riêng tư và quyền truy cập ứng dụng mạng xã hội</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_4" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_4" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_4" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_4" value="4"> 4</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>5. Không đưa dữ liệu cá nhân/học sinh vào các công cụ AI (ChatGPT, Gemini)</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_5" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_5" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_5" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_5" value="4"> 4</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>6. Biết rõ các bước xử lý và đầu mối báo cáo (GVCN, BGH, Tổng đài 111) khi có sự cố</td>
-                  <td style="text-align: center;">
-                    <label><input type="radio" name="s_6" value="1"> 1</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_6" value="2"> 2</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_6" value="3"> 3</label>&nbsp;&nbsp;
-                    <label><input type="radio" name="s_6" value="4"> 4</label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-
-            <div style="text-align: center; margin-top: 1.25rem;">
-              <button class="primary-btn" onclick="alert('Đã ghi nhận dữ liệu khảo sát thành công! Dữ liệu được mã hóa và tổng hợp phục vụ báo cáo đề tài SAFE-LS.')">
-                💾 Gửi Phiếu Khảo Sát Nghiên Cứu
-              </button>
-            </div>
-          </div>
-        </div>
-
       </section>
-
-      <div style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px dashed var(--border-card);">
-        <a href="admin.html" style="font-size: 0.82rem; color: #64748b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <span>Khu vực Quản trị viên & Thống kê nghiên cứu (Admin Portal)</span>
-        </a>
-      </div>
     </div>
   </main>
+
+  <!-- Portal Footer -->
+  <footer class="portal-footer">
+    <div style="font-weight: 700; color: #1e3a8a; font-size: 0.95rem; margin-bottom: 0.35rem;">
+      SAFE-LS – Cổng giáo dục kỹ năng bảo vệ dữ liệu cá nhân
+    </div>
+    <div style="font-size: 0.82rem; color: #64748b; line-height: 1.6;">
+      Dự án Nghiên cứu Khoa học Giáo dục tỉnh Lạng Sơn · Bản quyền © 2026<br>
+      Thiết kế &amp; Vận hành phục vụ công tác giảng dạy và học tập an toàn số
+    </div>
+  </footer>
 
   <!-- QR Code Modal (Accessible from Hero Banner) -->
   <div class="modal-overlay" id="qrModal">
