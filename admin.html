@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAFE-LS | Trang Quản Trị Admin & Đồng Bộ Google Sheets</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .admin-nav {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .admin-tab-btn {
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #64748b;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .admin-tab-btn.active {
+      color: #1d4ed8;
+      border-bottom-color: #1d4ed8;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #1d4ed8;
+      margin-top: 0.35rem;
+    }
+    .code-block {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+      line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="top-navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        <span>SAFE-LS</span>
+        <span class="brand-badge" style="background: #fee2e2; color: #dc2626;">Admin Portal</span>
+      </a>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <a href="index.html" class="secondary-btn" style="padding: 0.45rem 0.85rem; font-size: 0.82rem; text-decoration: none;">
+          ← Về Cổng thông tin
+        </a>
+        <button id="adminLogoutBtn" class="secondary-btn" style="padding: 0.45rem 0.85rem; font-size: 0.82rem; display: none;" onclick="logoutAdmin()">
+          Đăng xuất
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <div class="portal-shell">
+
+      <!-- ==================== PHẦN 1: MÀN HÌNH ĐĂNG NHẬP MÃ PIN ==================== -->
+      <div id="adminLoginBox" style="max-width: 420px; margin: 3rem auto; text-align: center; padding: 2rem 1rem;">
+        <div style="width: 56px; height: 56px; background: #eff6ff; color: #1d4ed8; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h2 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">Đăng Nhập Quản Trị SAFE-LS</h2>
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1.5rem;">Dành cho giáo viên và nhóm nghiên cứu quản lý số liệu</p>
+
+        <input type="password" id="pinInput" placeholder="Nhập mã PIN (Mặc định: safels2026)" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 1rem; text-align: center; margin-bottom: 1rem;">
+        <button class="primary-btn" style="width: 100%; justify-content: center;" onclick="checkPin()">
+          Đăng Nhập Hệ Thống
+        </button>
+        <div id="pinErrorMsg" style="color: #dc2626; font-size: 0.84rem; font-weight: 600; margin-top: 0.75rem; display: none;">Mã PIN không chính xác! Vui lòng thử lại.</div>
+      </div>
+
+      <!-- ==================== PHẦN 2: BẢNG ĐIỀU KHIỂN CHÍNH (ADMIN DASHBOARD) ==================== -->
+      <div id="adminDashboardBox" style="display: none;">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a;">Bảng Quản Trị Nghiên Cứu SAFE-LS</h2>
+            <p style="font-size: 0.88rem; color: #64748b;">Quản lý dữ liệu khảo sát thực nghiệm & cấu hình đồng bộ Google Sheets</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="primary-btn" onclick="exportDataToCSV()" style="padding: 0.6rem 1rem; font-size: 0.88rem;">
+              📥 Xuất File Excel (CSV)
+            </button>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="admin-nav">
+          <button class="admin-tab-btn active" data-tab="tab-stats">📊 Thống kê & Số liệu bài làm</button>
+          <button class="admin-tab-btn" data-tab="tab-gsheet">🔗 Cấu hình Google Sheets</button>
+          <button class="admin-tab-btn" data-tab="tab-questions">📚 Ngân hàng câu hỏi</button>
+        </div>
+
+        <!-- TAB 1: THỐNG KÊ & SỐ LIỆU -->
+        <div id="tab-stats" class="admin-tab-content">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span style="font-size: 0.84rem; color: #64748b; font-weight: 600;">Tổng lượt làm bài</span>
+              <div class="kpi-val" id="kpiTotal">0</div>
+            </div>
+            <div class="kpi-card">
+              <span style="font-size: 0.84rem; color: #64748b; font-weight: 600;">Lượt Giáo viên</span>
+              <div class="kpi-val" id="kpiTeacher" style="color: #0d9488;">0</div>
+            </div>
+            <div class="kpi-card">
+              <span style="font-size: 0.84rem; color: #64748b; font-weight: 600;">Lượt Học sinh</span>
+              <div class="kpi-val" id="kpiStudent" style="color: #7c3aed;">0</div>
+            </div>
+            <div class="kpi-card">
+              <span style="font-size: 0.84rem; color: #64748b; font-weight: 600;">Tỷ lệ Đạt (Mức 3 & 4)</span>
+              <div class="kpi-val" id="kpiPassRate" style="color: #16a34a;">0%</div>
+            </div>
+          </div>
+
+          <div class="content-box" style="background: #ffffff; padding: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b;">Danh sách chi tiết kết quả làm bài mới nhất</h3>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="secondary-btn" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" onclick="addSampleData()">
+                  ➕ Nạp số liệu mẫu
+                </button>
+                <button class="secondary-btn" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5;" onclick="clearAllData()">
+                  🗑️ Xóa danh sách
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Thời gian</th>
+                    <th>Đối tượng</th>
+                    <th>Họ tên</th>
+                    <th>Trường / Lớp</th>
+                    <th>Điểm số</th>
+                    <th>Tỷ lệ</th>
+                    <th>Xếp loại</th>
+                  </tr>
+                </thead>
+                <tbody id="submissionsTableBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: #94a3b8; padding: 2rem;">Chưa có lượt làm bài nào được ghi nhận.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: CẤU HÌNH GOOGLE SHEETS -->
+        <div id="tab-gsheet" class="admin-tab-content" style="display: none;">
+          <div class="content-box highlight-blue">
+            <h3 class="box-title">Hướng dẫn kết nối tự động lưu vào Google Sheets (Chỉ mất 2 phút)</h3>
+            <ol style="padding-left: 1.25rem; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+              <li>Mở một file <strong>Google Trang tính (Google Sheets)</strong> mới trên Google Drive của cô giáo.</li>
+              <li>Trên thanh menu của Google Sheets, bấm: <strong>Tiện ích mở rộng (Extensions) $\rightarrow$ Apps Script</strong>.</li>
+              <li>Xóa hết mã có sẵn trong Apps Script và dán đoạn mã ngắn gọn bên dưới vào:</li>
+            </ol>
+
+            <div class="code-block" id="appsScriptCode">
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  
+  // Tự động tạo hàng tiêu đề nếu là lần đầu tiên
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      "Thời gian", "Đối tượng", "Họ tên", "Trường/Lớp", 
+      "Điểm số", "Phần trăm", "Xếp loại", 
+      "1. Nhận diện DLCN", "2. Bảo vệ tài khoản", "3. Lừa đảo", 
+      "4. Quyền riêng tư", "5. AI an toàn", "6. Xử lý sự cố"
+    ]);
+  }
+  
+  // Ghi kết quả mới vào trang tính
+  sheet.appendRow([
+    data.timestamp, data.role, data.name, data.organization,
+    data.score, data.percentage + "%", data.level,
+    data.skill1, data.skill2, data.skill3,
+    data.skill4, data.skill5, data.skill6
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({result: "success"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+
+            <button class="secondary-btn" style="margin-bottom: 1rem; font-size: 0.84rem;" onclick="copyAppsScript()">
+              📋 Sao chép mã Google Apps Script
+            </button>
+
+            <ol start="4" style="padding-left: 1.25rem; font-size: 0.9rem; color: #334155; line-height: 1.7;">
+              <li>Bấm nút <strong>Triển khai (Deploy) $\rightarrow$ Tùy chọn triển khai mới (New deployment)</strong>.</li>
+              <li>Chọn loại: <strong>Ứng dụng web (Web app)</strong> $\rightarrow$ Mục <em>Ai có quyền truy cập (Who has access)</em>: Chọn <strong>Bất kỳ ai (Anyone)</strong> $\rightarrow$ Bấm <strong>Triển khai</strong>.</li>
+              <li>Copy đường link <strong>URL của ứng dụng web</strong> và dán vào ô bên dưới:</li>
+            </ol>
+          </div>
+
+          <div class="content-box" style="background: #ffffff;">
+            <h3 class="box-title">Dán URL Google Sheets Webhook của bạn</h3>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+              <input type="text" id="gsheetUrlInput" placeholder="Ví dụ: https://script.google.com/macros/s/AKfycb.../exec" style="flex: 1; min-width: 280px; padding: 0.75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem;">
+              <button class="primary-btn" onclick="saveGSheetUrl()">Lưu Cấu Hình</button>
+              <button class="secondary-btn" onclick="testGSheetConnection()">🧪 Gửi Thử 1 Dòng Test</button>
+            </div>
+            <div id="gsheetStatusText" style="font-size: 0.85rem; color: #64748b;">Chưa cấu hình URL Google Sheets.</div>
+          </div>
+        </div>
+
+        <!-- TAB 3: NGÂN HÀNG CÂU HỎI -->
+        <div id="tab-questions" class="admin-tab-content" style="display: none;">
+          <div class="content-box highlight-green">
+            <h3 class="box-title">Ngân hàng câu hỏi chuẩn mô hình SAFE-LS (Đang áp dụng)</h3>
+            <p style="font-size: 0.88rem; color: #475569;">
+              Hệ thống hiện đang vận hành với <strong>18 câu trắc nghiệm chuyên sâu cho Giáo viên</strong> và <strong>18 câu thực tế cho Học sinh</strong>, bao phủ trọn vẹn 6 nhóm kỹ năng cơ bản và các quy định pháp luật mới nhất.
+            </p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style="font-weight: 700; color: #1e293b;">Xem danh sách câu hỏi theo phân loại:</div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="secondary-btn active" id="viewGvQuestionsBtn" onclick="switchQuestionView('gv')">🎓 Câu hỏi Giáo viên (18)</button>
+              <button class="secondary-btn" id="viewHsQuestionsBtn" onclick="switchQuestionView('hs')">🎒 Câu hỏi Học sinh (18)</button>
+            </div>
+          </div>
+
+          <div id="questionsListContainer"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Logic quản trị Admin
+    const CORRECT_PIN = 'safels2026';
+
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value.trim();
+      const err = document.getElementById('pinErrorMsg');
+      if (pin === CORRECT_PIN || pin === localStorage.getItem('safels_custom_pin')) {
+        document.getElementById('adminLoginBox').style.display = 'none';
+        document.getElementById('adminDashboardBox').style.display = 'block';
+        document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
+        loadAdminStats();
+        loadGSheetConfig();
+        switchQuestionView('gv');
+      } else {
+        err.style.display = 'block';
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminLoginBox').style.display = 'block';
+      document.getElementById('adminDashboardBox').style.display = 'none';
+      document.getElementById('adminLogoutBtn').style.display = 'none';
+      document.getElementById('pinInput').value = '';
+    }
+
+    // Tabs Switching
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.admin-tab-content').forEach(c => c.style.display = 'none');
+        
+        e.currentTarget.classList.add('active');
+        const tabId = e.currentTarget.dataset.tab;
+        document.getElementById(tabId).style.display = 'block';
+      });
+    });
+
+    // Load thống kê từ LocalStorage
+    function loadAdminStats() {
+      const submissions = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
+      document.getElementById('kpiTotal').textContent = submissions.length;
+
+      let gvCount = 0;
+      let hsCount = 0;
+      let passCount = 0;
+
+      submissions.forEach(s => {
+        if (s.role === 'Giáo viên') gvCount++;
+        else hsCount++;
+        if (s.percentage >= 70) passCount++;
+      });
+
+      document.getElementById('kpiTeacher').textContent = gvCount;
+      document.getElementById('kpiStudent').textContent = hsCount;
+      const passRate = submissions.length > 0 ? Math.round((passCount / submissions.length) * 100) : 0;
+      document.getElementById('kpiPassRate').textContent = passRate + '%';
+
+      const tbody = document.getElementById('submissionsTableBody');
+      if (submissions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 2rem;">Chưa có lượt làm bài nào được ghi nhận.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = submissions.map(s => `
+        <tr>
+          <td><span style="font-size: 0.8rem; color: #64748b;">${s.timestamp}</span></td>
+          <td><span class="badge-tag">${s.role}</span></td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.organization}</td>
+          <td><strong>${s.score}</strong></td>
+          <td><span style="color: ${s.percentage >= 70 ? '#16a34a' : '#dc2626'}; font-weight: 700;">${s.percentage}%</span></td>
+          <td><span style="font-size: 0.82rem; font-weight: 600;">${s.level}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Xuất dữ liệu CSV (Tương thích Excel với UTF-8 BOM)
+    function exportDataToCSV() {
+      const submissions = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
+      if (submissions.length === 0) {
+        alert('Chưa có dữ liệu để xuất file Excel!');
+        return;
+      }
+
+      let csv = '\uFEFF'; // UTF-8 BOM for Excel
+      csv += 'Thời gian,Đối tượng,Họ tên,Trường/Lớp,Điểm số,Phần trăm,Xếp loại,1. Nhận diện DLCN,2. Bảo vệ tài khoản,3. Lừa đảo,4. Quyền riêng tư,5. AI an toàn,6. Xử lý sự cố\n';
+
+      submissions.forEach(s => {
+        csv += `"${s.timestamp}","${s.role}","${s.name}","${s.organization}","${s.score}","${s.percentage}%","${s.level}","${s.skill1}","${s.skill2}","${s.skill3}","${s.skill4}","${s.skill5}","${s.skill6}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `SAFE_LS_Du_Lieu_Khao_Sat_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Nạp dữ liệu mẫu để cô giáo kiểm tra xuất file
+    function addSampleData() {
+      const sample = [
+        {
+          timestamp: new Date().toLocaleString('vi-VN'),
+          role: 'Giáo viên',
+          name: 'Cô Nguyễn Thị Hoa',
+          organization: 'THPT Chuyên Chu Văn An, TP. Lạng Sơn',
+          score: '17/18',
+          percentage: 94,
+          level: 'Mức 4 – Thành thạo',
+          skill1: '3/3', skill2: '3/3', skill3: '3/3', skill4: '3/3', skill5: '3/3', skill6: '2/3'
+        },
+        {
+          timestamp: new Date().toLocaleString('vi-VN'),
+          role: 'Học sinh',
+          name: 'Hoàng Văn Nam',
+          organization: 'Lớp 11A2 - THPT Việt Bắc',
+          score: '14/18',
+          percentage: 78,
+          level: 'Mức 3 – Đạt',
+          skill1: '3/3', skill2: '2/3', skill3: '2/3', skill4: '3/3', skill5: '2/3', skill6: '2/3'
+        },
+        {
+          timestamp: new Date().toLocaleString('vi-VN'),
+          role: 'Học sinh',
+          name: 'Lương Thu Trang',
+          organization: 'Lớp 8C - THCS Chi Lăng',
+          score: '11/18',
+          percentage: 61,
+          level: 'Mức 2 – Đạt một phần',
+          skill1: '2/3', skill2: '2/3', skill3: '1/3', skill4: '2/3', skill5: '2/3', skill6: '2/3'
+        }
+      ];
+
+      const current = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
+      localStorage.setItem('safels_submissions', JSON.stringify([...sample, ...current]));
+      loadAdminStats();
+      alert('Đã nạp 3 bản ghi dữ liệu khảo sát mẫu thành công!');
+    }
+
+    function clearAllData() {
+      if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử bài làm trên máy này không?')) {
+        localStorage.removeItem('safels_submissions');
+        loadAdminStats();
+      }
+    }
+
+    // Google Sheets Config
+    function loadGSheetConfig() {
+      const url = localStorage.getItem('safels_gsheet_url') || '';
+      document.getElementById('gsheetUrlInput').value = url;
+      if (url) {
+        document.getElementById('gsheetStatusText').innerHTML = `✅ Đã kết nối với Webhook: <code style="word-break: break-all;">${url}</code>`;
+        document.getElementById('gsheetStatusText').style.color = '#15803d';
+      }
+    }
+
+    function saveGSheetUrl() {
+      const url = document.getElementById('gsheetUrlInput').value.trim();
+      localStorage.setItem('safels_gsheet_url', url);
+      loadGSheetConfig();
+      alert('Đã lưu cấu hình URL Google Sheets!');
+    }
+
+    async function testGSheetConnection() {
+      const url = document.getElementById('gsheetUrlInput').value.trim();
+      if (!url) {
+        alert('Vui lòng nhập URL Google Sheets trước!');
+        return;
+      }
+
+      const testPayload = {
+        timestamp: new Date().toLocaleString('vi-VN'),
+        role: 'Kiểm tra hệ thống',
+        name: 'Quản trị viên SAFE-LS',
+        organization: 'Lạng Sơn',
+        score: '18/18',
+        percentage: 100,
+        level: 'Mức 4 – Thành thạo',
+        skill1: '3/3', skill2: '3/3', skill3: '3/3', skill4: '3/3', skill5: '3/3', skill6: '3/3'
+      };
+
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testPayload)
+        });
+        alert('Đã gửi 1 dòng dữ liệu thử nghiệm sang Google Sheets! Hãy mở file Google Trang tính của bạn để kiểm tra kết quả.');
+      } catch (err) {
+        alert('Lỗi kết nối: ' + err.message);
+      }
+    }
+
+    function copyAppsScript() {
+      const code = document.getElementById('appsScriptCode').innerText;
+      navigator.clipboard.writeText(code);
+      alert('Đã sao chép mã Google Apps Script! Hãy dán vào Google Sheets của bạn.');
+    }
+
+    // Hiển thị danh sách câu hỏi
+    function switchQuestionView(type) {
+      const gvBtn = document.getElementById('viewGvQuestionsBtn');
+      const hsBtn = document.getElementById('viewHsQuestionsBtn');
+      const container = document.getElementById('questionsListContainer');
+
+      const list = type === 'gv' ? teacherQuizQuestions : studentQuizQuestions;
+
+      if (type === 'gv') {
+        gvBtn.classList.add('active');
+        hsBtn.classList.remove('active');
+      } else {
+        hsBtn.classList.add('active');
+        gvBtn.classList.remove('active');
+      }
+
+      container.innerHTML = list.map((q, idx) => `
+        <div class="content-box" style="margin-bottom: 0.85rem; background: #ffffff;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+            <span class="badge-tag">${q.skill}</span>
+            <span style="font-size: 0.8rem; color: #64748b;">Câu ${idx + 1} / ${list.length}</span>
+          </div>
+          <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">${q.q}</div>
+          <div style="font-size: 0.85rem; color: #15803d; font-weight: 600; background: #f0fdf4; padding: 0.5rem 0.75rem; border-radius: 6px;">
+            Đáp án đúng: ${q.options[q.correct]}
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

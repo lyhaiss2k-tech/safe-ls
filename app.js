@@ -1,6 +1,484 @@
-// Data and Logic for SAFE-LS Portal
+// ==========================================
+// SAFE-LS - CỔNG GIÁO DỤC BẢO VỆ DỮ LIỆU CÁ NHÂN
+// ==========================================
 
-// --- Scenarios Data (12 Scenarios across 4 Groups) ---
+// --- 1. NGÂN HÀNG CÂU HỎI TRẮC NGHIỆM CHO GIÁO VIÊN (18 CÂU) ---
+const teacherQuizQuestions = [
+  {
+    id: 'gv_1',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 1 (GV): Trong công tác quản lý lớp học, thông tin nào sau đây thuộc nhóm DỮ LIỆU CÁ NHÂN NHẠY CẢM của học sinh cần được bảo vệ ở cấp độ cao nhất?',
+    options: [
+      'A. Thời khóa biểu học tập các môn trong tuần của cả lớp.',
+      'B. Số định danh cá nhân (CCCD), hoàn cảnh gia đình đặc biệt, tình trạng sức khỏe và học bạ của học sinh.',
+      'C. Danh sách các bài hát trong chương trình ngoại khóa văn nghệ.',
+      'D. Tên các tổ chuyên môn trong trường học.'
+    ],
+    correct: 1,
+    explanation: 'Theo Luật Bảo vệ DLCN số 91/2025/QH15, số định danh, hồ sơ sức khỏe và hoàn cảnh cá nhân là dữ liệu nhạy cảm, tuyệt đối không được tự ý công khai.'
+  },
+  {
+    id: 'gv_2',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 2 (GV): Sau khi chấm thi cuối kỳ, giáo viên muốn thông báo kết quả cho phụ huynh. Cách làm nào sau đây là ĐÚNG QUY ĐỊNH và an toàn nhất?',
+    options: [
+      'A. Chụp ảnh toàn bộ bảng điểm có đủ họ tên, ngày sinh, điểm thi rồi gửi lên nhóm Zalo chung của lớp.',
+      'B. Đăng tải file Excel điểm lên trang Facebook cá nhân để phụ huynh tiện tải về xem.',
+      'C. Gửi kết quả riêng qua sổ liên lạc điện tử chính thức của trường hoặc gửi tin nhắn riêng cho từng phụ huynh.',
+      'D. Nhờ ban cán sự lớp in bảng điểm dán công khai ở cổng trường.'
+    ],
+    correct: 2,
+    explanation: 'Điểm số chi tiết gắn liền với danh tính cá nhân không được công khai tập thể trên các nhóm mở nhằm bảo vệ quyền riêng tư của học sinh.'
+  },
+  {
+    id: 'gv_3',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 3 (GV): Khi sử dụng các dịch vụ chuyển đổi file trực tuyến miễn phí (như nén file, chuyển Word sang PDF), giáo viên cần lưu ý điều gì?',
+    options: [
+      'A. Tải lên bình thường vì các trang web miễn phí đều tự động xóa file sau 1 phút.',
+      'B. Không tải lên các văn bản chứa danh sách đầy đủ thông tin định danh học sinh hoặc tài liệu thi mật lên các website không rõ nguồn gốc.',
+      'C. Chỉ cần đổi tên file là hoàn toàn yên tâm.',
+      'D. Dùng trình duyệt ẩn danh thì máy chủ chuyển đổi file sẽ không đọc được nội dung.'
+    ],
+    correct: 1,
+    explanation: 'Các dịch vụ chuyển đổi trực tuyến trôi nổi có thể lưu trữ và thu thập toàn bộ dữ liệu văn bản được tải lên máy chủ của họ.'
+  },
+  {
+    id: 'gv_4',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 4 (GV): Giáo viên quản lý tài khoản phần mềm quản lý giáo dục (như VnEdu, SMAS, CSDL ngành). Biện pháp bảo vệ tài khoản nào sau đây là TỐT NHẤT?',
+    options: [
+      'A. Đặt mật khẩu là số điện thoại hoặc ngày sinh của mình để tránh bị quên khi bận rộn.',
+      'B. Sử dụng mật khẩu mạnh dài trên 10 ký tự, đổi mật khẩu định kỳ và không lưu thông tin đăng nhập trên máy tính phòng hội đồng.',
+      'C. Chia sẻ tài khoản cho đồng nghiệp cùng tổ chuyên môn để nhờ nhập điểm hộ.',
+      'D. Luôn chọn "Ghi nhớ mật khẩu" trên mọi thiết bị trong trường.'
+    ],
+    correct: 1,
+    explanation: 'Tài khoản quản lý giáo dục nắm giữ toàn bộ thông tin học sinh trường lớp, giáo viên cần bảo mật nghiêm ngặt và không dùng chung.'
+  },
+  {
+    id: 'gv_5',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 5 (GV): Khi rời khỏi máy tính tại bàn giáo viên trong giờ ra chơi hoặc phòng hội đồng, thao tác bắt buộc của giáo viên là gì?',
+    options: [
+      'A. Để nguyên màn hình vì các thầy cô khác trong trường đều là người quen.',
+      'B. Nhấn tổ hợp phím Windows + L (hoặc Đăng xuất) để khóa màn hình máy tính.',
+      'C. Tắt màn hình bằng nút nguồn vật lý nhưng không khóa máy.',
+      'D. Đậy một tờ giấy lên bàn phím.'
+    ],
+    correct: 1,
+    explanation: 'Khóa màn hình máy tính giúp ngăn chặn việc học sinh hoặc người lạ vô tình/cố ý truy cập vào phần mềm nhập điểm hay hồ sơ trường học.'
+  },
+  {
+    id: 'gv_6',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 6 (GV): Giáo viên nhận được cuộc gọi tự xưng là cán bộ công nghệ thông tin Phòng/Sở GD&ĐT yêu cầu đọc mã xác thực OTP gửi về máy để "đồng bộ dữ liệu viên chức". Thầy/cô sẽ:',
+    options: [
+      'A. Đọc ngay mã OTP để kịp tiến độ cập nhật hồ sơ ngành.',
+      'B. Yêu cầu họ cho biết chức vụ rồi mới đọc mã.',
+      'C. Tuyệt đối không cung cấp mã OTP, tắt máy và liên hệ lại lãnh đạo nhà trường hoặc đầu mối CNTT chính thức để xác minh.',
+      'D. Đọc nửa đầu mã OTP để thử.'
+    ],
+    correct: 2,
+    explanation: 'Cơ quan quản lý và kỹ thuật viên chân chính KHÔNG BAO GIỜ yêu cầu người dùng cung cấp mã OTP dưới bất kỳ hình thức nào.'
+  },
+  {
+    id: 'gv_7',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 7 (GV): Một email gửi đến hòm thư giáo viên có tiêu đề "Thông báo khẩn từ Bộ GD&ĐT: Hướng dẫn khen thưởng năm học" đính kèm file `Huongdan_khenthuong.exe` (hoặc link lạ). Hành động đúng là:',
+    options: [
+      'A. Tải về và mở file chạy ngay để xem hướng dẫn khen thưởng.',
+      'B. Chuyển tiếp email cho tất cả giáo viên trong trường cùng xem.',
+      'C. Nhận diện dấu hiệu mã độc từ đuôi file lạ (.exe) và địa chỉ người gửi không phải tên miền chính thống (@moet.gov.vn), không mở file và báo cáo bộ phận CNTT.',
+      'D. Mở file trên điện thoại thay vì máy tính.'
+    ],
+    correct: 2,
+    explanation: 'Email giả mạo văn bản chỉ đạo ngành giáo dục là phương thức phổ biến để lây nhiễm mã độc tống tiền (Ransomware) vào mạng máy tính trường học.'
+  },
+  {
+    id: 'gv_8',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 8 (GV): Giáo viên nhận được tin nhắn từ tài khoản Facebook có hình ảnh và tên giống hệt Hiệu trưởng nhà trường nhắn tin: "Thầy/cô đang ở đâu, chuyển khoản gấp cho tôi 5 triệu đồng để tiếp đoàn kiểm tra, tí nữa về tôi trả". Thầy/cô sẽ:',
+    options: [
+      'A. Chuyển tiền ngay lập tức vì sợ Hiệu trưởng phê bình.',
+      'B. Gọi điện thoại trực tiếp hoặc gặp trực tiếp Hiệu trưởng để xác minh thông tin.',
+      'C. Nhắn tin hỏi số tài khoản rồi chuyển một nửa số tiền.',
+      'D. Vay mượn đồng nghiệp khác gom đủ tiền chuyển khoản.'
+    ],
+    correct: 1,
+    explanation: 'Kẻ xấu thường tạo tài khoản mạo danh cán bộ quản lý trường học để lừa đảo chuyển tiền. Luôn xác minh trực tiếp qua cuộc gọi thoại thông thường.'
+  },
+  {
+    id: 'gv_9',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 9 (GV): Khi phụ huynh nhờ giáo viên chuyển đường link bình chọn "Cuộc thi tài năng nhí / Giáo viên sáng tạo" vào nhóm lớp để cả lớp vào đăng nhập bình chọn, giáo viên nên làm gì?',
+    options: [
+      'A. Gửi ngay vào nhóm lớp và yêu cầu học sinh vào bình chọn nhiệt tình.',
+      'B. Kiểm tra kỹ nguồn gốc cuộc thi, tên miền; nếu trang yêu cầu người tham gia đăng nhập tài khoản Facebook/Google thì tuyệt đối không chia sẻ.',
+      'C. Tự mình đăng nhập thử nhiều lần xem sao.',
+      'D. Đăng lên trang web của trường.'
+    ],
+    correct: 1,
+    explanation: 'Rất nhiều trang web bình chọn giải thưởng là bẫy Phishing lừa đánh cắp tài khoản mạng xã hội của phụ huynh và học sinh.'
+  },
+  {
+    id: 'gv_10',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 10 (GV): Giáo viên muốn đăng video ngắn và hình ảnh về hoạt động trải nghiệm dã ngoại của lớp lên mạng xã hội. Điều kiện cần tuân thủ là gì?',
+    options: [
+      'A. Đăng thoải mái vì đây là hoạt động ngoại khóa mang tính giáo dục.',
+      'B. Cần có sự đồng ý của cha mẹ/người giám hộ học sinh, không để lộ các thông tin cá nhân định danh và không đăng những hình ảnh nhạy cảm của các em.',
+      'C. Chỉ cần gắn thẻ tên (tag) phụ huynh vào bài viết là được.',
+      'D. Đăng vào ban đêm để ít người xem.'
+    ],
+    correct: 1,
+    explanation: 'Theo Nghị định 356/2025/NĐ-CP và Luật Trẻ em, việc công khai hình ảnh học sinh trên không gian mạng phải bảo đảm quyền riêng tư và có sự đồng ý của gia đình.'
+  },
+  {
+    id: 'gv_11',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 11 (GV): Khi cài đặt ứng dụng soạn bài giảng hoặc trợ giảng trên điện thoại thông minh, ứng dụng yêu cầu cấp quyền "Truy cập danh bạ, vị trí GPS và micro liên tục". Quyết định đúng là:',
+    options: [
+      'A. Bấm đồng ý tất cả để app hoạt động đầy đủ tính năng.',
+      'B. Từ chối cấp quyền danh bạ và vị trí vì không phục vụ trực tiếp cho tính năng soạn bài giảng.',
+      'C. Tắt điện thoại đi bật lại rồi đồng ý.',
+      'D. Cài thêm 3 app tương tự để so sánh.'
+    ],
+    correct: 1,
+    explanation: 'Nguyên tắc bảo vệ dữ liệu: Chỉ cấp những quyền thực sự cần thiết tối thiểu cho ứng dụng hoạt động.'
+  },
+  {
+    id: 'gv_12',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 12 (GV): Khi chia sẻ tài liệu ôn tập cho học sinh qua Google Drive, giáo viên nên thiết lập quyền chia sẻ như thế nào?',
+    options: [
+      'A. Đặt quyền "Bất kỳ ai có đường liên kết đều có thể Chỉnh sửa (Editor)".',
+      'B. Chỉ đặt quyền "Người xem (Viewer)", tắt tùy chọn cho phép người xem tải xuống hoặc chỉnh sửa nếu là tài liệu bản quyền nội bộ.',
+      'C. Cung cấp cả tài khoản và mật khẩu Google Drive của giáo viên cho lớp.',
+      'D. Để công khai toàn bộ thư mục cá nhân lên mạng.'
+    ],
+    correct: 1,
+    explanation: 'Để quyền Editor công khai có thể dẫn đến việc tài liệu bị sửa đổi, xóa mất dữ liệu hoặc kẻ xấu tải file chứa mã độc vào thư mục của giáo viên.'
+  },
+  {
+    id: 'gv_13',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 13 (GV): Giáo viên muốn dùng ChatGPT/Gemini để hỗ trợ viết nhận xét học bạ cuối năm cho 40 học sinh trong lớp. Quy trình an toàn nhất là:',
+    options: [
+      'A. Tải lên bảng danh sách gồm Họ tên thật, Ngày sinh, Điểm số từng môn và yêu cầu AI viết nhận xét.',
+      'B. Ẩn danh hóa hoàn toàn: Chỉ đưa đặc điểm năng lực (ví dụ: Học sinh 1: Toán giỏi, Văn khá; Học sinh 2: có năng khiếu vẽ) mà không kèm bất kỳ thông tin nhận diện nào.',
+      'C. Chụp ảnh học bạ gửi lên cho AI tự phân tích.',
+      'D. Chia sẻ đường link quản lý điểm số của trường cho AI đăng nhập.'
+    ],
+    correct: 1,
+    explanation: 'Quy tắc 3 câu hỏi trước khi dùng AI: Luôn dừng lại, loại bỏ thông tin định danh cá nhân của học sinh trước khi đưa vào công cụ AI.'
+  },
+  {
+    id: 'gv_14',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 14 (GV): Giáo viên đang tham gia biên soạn đề thi tuyển sinh/chọn học sinh giỏi cấp trường. Có nên đưa ma trận và toàn bộ ngân hàng câu hỏi đề thi dự thảo vào các app AI trực tuyến không?',
+    options: [
+      'A. Nên đưa vào để AI thẩm định độ khó và sửa lỗi chính tả nhanh nhất.',
+      'B. Tuyệt đối không, vì dữ liệu gửi lên các nền tảng AI có thể được dùng để tái huấn luyện mô hình và có nguy cơ lộ lọt bí mật đề thi.',
+      'C. Đưa vào lúc đêm khuya vì lúc đó ít người dùng AI nên không sợ lộ.',
+      'D. Đổi ngôn ngữ sang tiếng Anh rồi đưa vào.'
+    ],
+    correct: 1,
+    explanation: 'Đề thi chưa công bố là tài liệu mật của ngành giáo dục. Đưa vào công cụ AI công cộng tiềm ẩn rủi ro rò rỉ dữ liệu nghiêm trọng.'
+  },
+  {
+    id: 'gv_15',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 15 (GV): Một trang web giới thiệu "Công cụ AI nhận diện tính cách học sinh qua quét ảnh khuôn mặt và vân tay". Giáo viên nên xử lý thế nào?',
+    options: [
+      'A. Tổ chức chụp ảnh toàn bộ học sinh trong lớp gửi lên web để thử nghiệm.',
+      'B. Cảnh giác, không thu thập và cung cấp dữ liệu sinh trắc học của học sinh cho các ứng dụng chưa được cơ quan quản lý thẩm định.',
+      'C. Vận động phụ huynh đóng tiền mua gói VIP của ứng dụng này.',
+      'D. Yêu cầu ban cán sự lớp tự thu thập dữ liệu gửi lên app.'
+    ],
+    correct: 1,
+    explanation: 'Dữ liệu sinh trắc học (khuôn mặt, vân tay) của trẻ em được pháp luật bảo vệ nghiêm ngặt. Nghiêm cấm thu thập trái phép.'
+  },
+  {
+    id: 'gv_16',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 16 (GV): Khi giáo viên phát hiện tài khoản email hoặc mạng xã hội của mình bị kẻ xấu chiếm quyền điều khiển và đang gửi tin nhắn vay tiền cho phụ huynh, bước đầu tiên cần làm là gì?',
+    options: [
+      'A. Im lặng để xem kẻ xấu làm gì tiếp theo.',
+      'B. Lập tức thông báo khẩn cấp qua nhóm lớp/kênh khác cảnh báo phụ huynh, đồng thời tiến hành đổi mật khẩu hoặc báo cáo hỗ trợ khóa tài khoản ngay.',
+      'C. Chờ hết ngày xem tài khoản có tự phục hồi không.',
+      'D. Chuyển tiền theo yêu cầu của kẻ xấu để chuộc lại tài khoản.'
+    ],
+    correct: 1,
+    explanation: 'Thông báo khẩn cấp tới phụ huynh là biện pháp First Response quan trọng nhất để ngăn chặn việc phụ huynh bị lừa tiền.'
+  },
+  {
+    id: 'gv_17',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 17 (GV): Một giáo viên vô tình làm mất thẻ nhớ/USB chứa danh sách dữ liệu hồ sơ học sinh của trường tại nơi công cộng. Giáo viên cần hành động như thế nào?',
+    options: [
+      'A. Giấu kín không nói với ai vì sợ bị kỷ luật.',
+      'B. Báo cáo ngay cho Ban Giám hiệu nhà trường và bộ phận quản trị để rà soát mức độ nhạy cảm của dữ liệu và kích hoạt phương án ứng phó kịp thời.',
+      'C. Mua USB mới để thay thế và coi như không có chuyện gì.',
+      'D. Đăng bài lên mạng xã hội treo thưởng tìm lại.'
+    ],
+    correct: 1,
+    explanation: 'Báo cáo trung thực và kịp thời với lãnh đạo nhà trường giúp chủ động kiểm soát thiệt hại và bảo vệ thông tin học sinh theo quy định.'
+  },
+  {
+    id: 'gv_18',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 18 (GV): Khi phát hiện học sinh trong trường đang bị đối tượng trên mạng đe dọa, tống tiền bằng hình ảnh cắt ghép, giáo viên cần phối hợp đầu mối nào?',
+    options: [
+      'A. Yêu cầu học sinh tự giải quyết vì đây là việc riêng tư trên mạng.',
+      'B. Trấn an học sinh, phối hợp cùng phụ huynh, Ban Giám hiệu, Tổ tư vấn tâm lý và liên hệ Tổng đài Quốc gia 111 hoặc cơ quan Công an (PA05).',
+      'C. Đăng hình ảnh kẻ đe dọa lên trang Facebook của trường để cộng đồng mạng truy tìm.',
+      'D. Khuyên học sinh nghỉ học vài ngày để tránh rắc rối.'
+    ],
+    correct: 1,
+    explanation: 'Bảo vệ học sinh trước nguy cơ xâm hại trên môi trường số là trách nhiệm của nhà trường; cần phối hợp ngay với các đơn vị chuyên môn và cơ quan công an.'
+  }
+];
+
+// --- 2. NGÂN HÀNG CÂU HỎI TRẮC NGHIỆM CHO HỌC SINH (18 CÂU) ---
+const studentQuizQuestions = [
+  {
+    id: 'hs_1',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 1 (HS): Thông tin nào sau đây của em là DỮ LIỆU CÁ NHÂN QUAN TRỌNG mà em tuyệt đối không nên công khai trên mạng xã hội?',
+    options: [
+      'A. Tên câu lạc bộ thể thao mà em yêu thích.',
+      'B. Họ tên đầy đủ, ngày tháng năm sinh, số điện thoại, địa chỉ nhà riêng và số định danh (CCCD).',
+      'C. Tên một bài thơ em học trong sách giáo khoa.',
+      'D. Màu sắc em yêu thích.'
+    ],
+    correct: 1,
+    explanation: 'Họ tên, ngày sinh, CCCD, địa chỉ và SĐT là dữ liệu định danh, kẻ xấu có thể dùng để mạo danh em hoặc tìm đến nhà quấy rối.'
+  },
+  {
+    id: 'hs_2',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 2 (HS): Khi chụp ảnh thẻ học sinh hoặc Căn cước công dân để nộp hồ sơ trực tuyến, điều em cần làm trước khi đăng ảnh lên mạng xã hội là gì?',
+    options: [
+      'A. Chỉnh sửa bộ lọc màu cho ảnh thật đẹp rồi đăng công khai.',
+      'B. Tuyệt đối KHÔNG đăng ảnh thẻ học sinh / CCCD lên mạng xã hội vì có chứa mã QR và đầy đủ thông tin định danh cá nhân.',
+      'C. Rủ thêm các bạn cùng chụp thẻ học sinh đăng lên chung.',
+      'D. Đăng lên phần Tin (Story) 24 giờ vì nghĩ 24 giờ sau ảnh sẽ tự mất.'
+    ],
+    correct: 1,
+    explanation: 'Thẻ học sinh và CCCD có chứa mã định danh và mã QR. Người lạ có thể quét mã QR để lấy toàn bộ thông tin nhạy cảm của em.'
+  },
+  {
+    id: 'hs_3',
+    skill: 'Nhận diện dữ liệu cá nhân',
+    q: 'Câu 3 (HS): Hành động nào sau đây là TÔN TRỌNG quyền riêng tư dữ liệu của bạn bè trong lớp?',
+    options: [
+      'A. Chụp lén bạn lúc ngủ gật rồi đăng lên nhóm Facebook công khai để mọi người cười đùa.',
+      'B. Hỏi ý kiến bạn và được bạn đồng ý trước khi đăng ảnh hoặc gắn thẻ (tag) bạn lên mạng xã hội.',
+      'C. Cho số điện thoại của bạn cho người lạ trên mạng khi họ hỏi.',
+      'D. Gửi danh sách số điện thoại của cả lớp cho trung tâm gia sư.'
+    ],
+    correct: 1,
+    explanation: 'Tôn trọng quyền riêng tư của người khác là văn hóa số văn minh; luôn xin phép trước khi đăng ảnh hoặc chia sẻ thông tin của bạn bè.'
+  },
+  {
+    id: 'hs_4',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 4 (HS): Mật khẩu nào sau đây được coi là MẠNH và AN TOÀN nhất cho tài khoản học tập của em?',
+    options: [
+      'A. `12345678` hoặc `abcdefgh`.',
+      'B. Ngày tháng năm sinh của em (ví dụ: `15082010`).',
+      'C. `HocSinhLangSon@2026!` (kết hợp chữ hoa, chữ thường, số và ký tự đặc biệt).',
+      'D. Tên người yêu thích hoặc tên thú cưng viết liền không dấu.'
+    ],
+    correct: 2,
+    explanation: 'Mật khẩu mạnh cần dài trên 10 ký tự, kết hợp chữ hoa, thường, số và ký tự đặc biệt, không chứa thông tin dễ đoán.'
+  },
+  {
+    id: 'hs_5',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 5 (HS): Sau khi đăng nhập tài khoản Microsoft Teams / Google Classroom trên máy tính phòng Tin học của trường, em phải làm gì trước khi hết giờ?',
+    options: [
+      'A. Chỉ cần đóng cửa sổ trình duyệt (bấm dấu X màu đỏ).',
+      'B. Bấm nút Đăng xuất (Sign out), không chọn lưu mật khẩu và xóa lịch sử duyệt web nếu cần.',
+      'C. Tắt màn hình máy tính rồi đứng dậy ra về.',
+      'D. Để nguyên để buổi sau vào đỡ phải đăng nhập lại.'
+    ],
+    correct: 1,
+    explanation: 'Chỉ tắt trình duyệt mà không Đăng xuất thì tài khoản vẫn mở, bạn ngồi máy sau có thể vào đọc trộm tin nhắn hoặc đổi mật khẩu của em.'
+  },
+  {
+    id: 'hs_6',
+    skill: 'Bảo vệ tài khoản và mật khẩu',
+    q: 'Câu 6 (HS): Một người bạn thân cùng lớp hỏi mượn tài khoản và mật khẩu Facebook/Zalo của em để "vào đọc một tin nhắn riêng", em nên làm gì?',
+    options: [
+      'A. Đưa ngay vì là bạn thân nên hoàn toàn tin tưởng nhau.',
+      'B. Từ chối khéo léo và giải thích rằng mật khẩu cá nhân phải tự bảo mật; có thể hỗ trợ bạn bằng cách khác.',
+      'C. Đổi mật khẩu dễ cho bạn dùng rồi đổi lại sau.',
+      'D. Đọc cả mã xác thực OTP gửi về điện thoại cho bạn.'
+    ],
+    correct: 1,
+    explanation: 'Mật khẩu là bí mật cá nhân tuyệt đối. Nhiều trường hợp bạn bè bất cẩn làm lộ mật khẩu hoặc bị kẻ xấu lợi dụng gây hiểu lầm đáng tiếc.'
+  },
+  {
+    id: 'hs_7',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 7 (HS): Em thấy một bài đăng trên mạng: "Tặng 2000 Quân Huy / Kim Cương Free Fire miễn phí nhân dịp sinh nhật game, bấm vào link `garenarewards-nhanqua.top` để nhận". Em sẽ:',
+    options: [
+      'A. Bấm vào ngay và đăng nhập tài khoản Facebook/Garena để nhận quà.',
+      'B. Chia sẻ link cho cả lớp cùng vào nhận cho vui.',
+      'C. Nhận diện đây là bẫy lừa đảo giả mạo (Phishing) để cướp nick game, tuyệt đối không bấm vào link và cảnh báo bạn bè.',
+      'D. Tạo tài khoản ảo để thử nhận quà.'
+    ],
+    correct: 2,
+    explanation: 'Không có nhà phát hành game chính thống nào tặng quà bằng cách yêu cầu đăng nhập trên các trang web có tên miền lạ.'
+  },
+  {
+    id: 'hs_8',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 8 (HS): Bạn nhận được tin nhắn từ một tài khoản có tên và avatar giống hệt Giáo viên chủ nhiệm: "Cô đang bận việc gia đình gấp, em nạp hộ cô thẻ điện thoại 100k tí lên lớp cô trả nhé". Em xử lý thế nào?',
+    options: [
+      'A. Chạy đi mua thẻ nạp ngay vì sợ cô trừ điểm chuyên cần.',
+      'B. Nhờ bố mẹ gọi điện thoại trực tiếp cho cô giáo chủ nhiệm để xác minh, không vội vàng mua thẻ nạp theo tin nhắn mạng xã hội.',
+      'C. Nhắn tin hỏi số seri thẻ rồi gửi.',
+      'D. Gửi tin nhắn vào nhóm lớp giục các bạn khác nạp cùng.'
+    ],
+    correct: 1,
+    explanation: 'Kẻ xấu thường hack hoặc tạo nick giả mạo thầy cô để lừa học sinh. Luôn nhớ nguyên tắc: Gọi điện xác minh trực tiếp.'
+  },
+  {
+    id: 'hs_9',
+    skill: 'Nhận diện nguy cơ và lừa đảo',
+    q: 'Câu 9 (HS): Một người lạ trên mạng nhắn tin hứa hẹn: "Tuyển em làm người mẫu ảnh tuổi teen / đại sứ học đường, chỉ cần gửi ảnh toàn thân và chụp CCCD để nhận hợp đồng 5 triệu đồng". Em nên làm gì?',
+    options: [
+      'A. Chụp gửi ngay vì cơ hội kiếm tiền và nổi tiếng rất hấp dẫn.',
+      'B. Rủ bạn thân cùng tham gia ứng tuyển.',
+      'C. Cảnh giác với chiêu trò dụ dỗ thu thập hình ảnh nhạy cảm và thông tin cá nhân; báo ngay cho bố mẹ hoặc thầy cô giáo.',
+      'D. Tự gửi ảnh một mình không cho bố mẹ biết.'
+    ],
+    correct: 2,
+    explanation: 'Đây là chiêu trò phổ biến của các đối tượng xấu nhằm thu thập hình ảnh, thông tin để tống tiền hoặc lừa đảo qua mạng.'
+  },
+  {
+    id: 'hs_10',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 10 (HS): Khi đăng bài viết trên mạng xã hội Facebook hoặc TikTok, chế độ hiển thị nào là AN TOÀN NHẤT cho học sinh?',
+    options: [
+      'A. Chế độ "Công khai (Public)" để nhận được thật nhiều lượt like từ người lạ.',
+      'B. Chế độ "Bạn bè (Friends)" và thường xuyên lọc lại danh sách bạn bè, không kết bạn với người lạ không rõ danh tính.',
+      'C. Luôn bật tính năng chia sẻ vị trí (check-in) nơi em đang ở theo thời gian thực.',
+      'D. Đăng công khai kèm số điện thoại để mọi người tiện liên lạc.'
+    ],
+    correct: 1,
+    explanation: 'Giới hạn người xem ở chế độ Bạn bè giúp ngăn ngừa kẻ xấu theo dõi thói quen, lịch trình và đời tư của em.'
+  },
+  {
+    id: 'hs_11',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 11 (HS): Khi tải một trò chơi mới trên điện thoại, trò chơi yêu cầu quyền "Truy cập danh bạ, quyền đọc tin nhắn SMS và vị trí GPS". Em nên:',
+    options: [
+      'A. Bấm "Cho phép tất cả" để vào chơi game ngay.',
+      'B. Từ chối các quyền không liên quan đến game hoặc gỡ cài đặt nếu game bắt buộc phải cấp các quyền nhạy cảm vô lý này.',
+      'C. Bấm cho phép rồi tắt máy đi ngủ.',
+      'D. Cài thêm nhiều game tương tự.'
+    ],
+    correct: 1,
+    explanation: 'Game thông thường không cần đọc tin nhắn SMS hay danh bạ. Các app đòi quyền này thường là app gián điệp đánh cắp mã OTP ngân hàng của gia đình.'
+  },
+  {
+    id: 'hs_12',
+    skill: 'Quản lý quyền riêng tư',
+    q: 'Câu 12 (HS): Hành động nào sau đây bị coi là XÂM PHẠM QUYỀN RIÊNG TƯ của người khác và có thể vi phạm pháp luật?',
+    options: [
+      'A. Tự ý đọc trộm nhật ký, tin nhắn trên điện thoại của bạn bè khi bạn không để ý.',
+      'B. Lập nhóm kín để nói xấu và đăng tải thông tin cá nhân của người khác lên mạng.',
+      'C. Chia sẻ tài khoản mạng xã hội của người khác cho bên thứ ba khi chưa được phép.',
+      'D. Cả A, B và C đều là hành vi xâm phạm quyền riêng tư.'
+    ],
+    correct: 3,
+    explanation: 'Tất cả các hành vi trên đều xâm phạm quyền bất khả xâm phạm về đời sống riêng tư và bí mật cá nhân theo pháp luật Việt Nam.'
+  },
+  {
+    id: 'hs_13',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 13 (HS): Một trào lưu trên TikTok rủ học sinh tải ảnh chân dung khuôn mặt rõ nét lên ứng dụng AI nước ngoài để "tạo video hoạt hình tương lai". Nguy cơ tiềm ẩn lớn nhất là gì?',
+    options: [
+      'A. Tốn dung lượng pin điện thoại.',
+      'B. Dữ liệu khuôn mặt bị thu thập để kẻ xấu dùng công nghệ Deepfake ghép mặt em vào các video lừa đảo hoặc nhạy cảm.',
+      'C. AI sẽ vẽ tranh không được đẹp như mong muốn.',
+      'D. Bị bạn bè trêu chọc vì tranh hoạt hình xấu.'
+    ],
+    correct: 1,
+    explanation: 'Hình ảnh khuôn mặt chất lượng cao có thể bị lợi dụng để huấn luyện AI Deepfake nhằm mạo danh gọi video lừa tiền người thân trong gia đình.'
+  },
+  {
+    id: 'hs_14',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 14 (HS): Khi dùng các công cụ AI (như ChatGPT, Gemini) để giải bài tập, em TUYỆT ĐỐI KHÔNG NÊN đưa thông tin nào vào phần trò chuyện?',
+    options: [
+      'A. Đề bài Toán hoặc bài thơ cần phân tích.',
+      'B. Họ tên thật, trường lớp, địa chỉ nhà, số điện thoại hoặc bí mật riêng tư của bản thân và bạn bè.',
+      'C. Câu hỏi về lịch sử, địa lý Việt Nam.',
+      'D. Từ vựng tiếng Anh cần dịch nghĩa.'
+    ],
+    correct: 1,
+    explanation: 'Mọi thông tin em gõ vào AI có thể được lưu trữ trên máy chủ công cộng. Tuyệt đối không chia sẻ dữ liệu cá nhân vào prompt.'
+  },
+  {
+    id: 'hs_15',
+    skill: 'Sử dụng AI an toàn',
+    q: 'Câu 15 (HS): Nếu em thấy trên mạng xuất hiện một video bạn cùng lớp đang có hành vi nhạy cảm nhưng khẩu hình miệng và khuôn mặt có dấu hiệu giật lag bất thường (nghi là video AI Deepfake ghép mặt), em nên làm gì?',
+    options: [
+      'A. Tải video về và gửi ngay cho cả lớp cùng xem.',
+      'B. Báo ngay cho bạn bị hại và thầy cô giáo/bố mẹ biết để cùng xử lý, tuyệt đối không bấm like, bình luận hay chia sẻ phát tán video giả mạo.',
+      'C. Đăng video lên TikTok để kiếm tương tác.',
+      'D. Nhắn tin trêu chọc bạn.'
+    ],
+    correct: 1,
+    explanation: 'Lan truyền hình ảnh Deepfake giả mạo là hành vi tiếp tay cho bạo lực mạng và có thể bị xử lý theo Luật An ninh mạng.'
+  },
+  {
+    id: 'hs_16',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 16 (HS): Nếu em lỡ bấm vào một đường link lạ và phát hiện tài khoản mạng xã hội của mình tự động nhắn tin spam cho bạn bè, em cần làm gì ngay lập tức?',
+    options: [
+      'A. Đổi mật khẩu ngay lập tức, đăng xuất khỏi tất cả thiết bị lạ và thông báo cho bạn bè biết tài khoản đang bị tấn công.',
+      'B. Xóa ứng dụng và không dùng điện thoại nữa.',
+      'C. Chờ vài ngày xem tài khoản có tự hết không.',
+      'D. Nhắn tin xin kẻ tấn công trả lại tài khoản.'
+    ],
+    correct: 0,
+    explanation: 'Đổi mật khẩu và đăng xuất khỏi mọi thiết bị là bước khẩn cấp đầu tiên để ngăn chặn kẻ xấu tiếp tục chiếm quyền điều khiển.'
+  },
+  {
+    id: 'hs_17',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 17 (HS): Khi bị một người lạ trên mạng nhắn tin đe dọa tống tiền hoặc bắt ép làm điều xấu nếu không sẽ tung ảnh riêng tư, hành động ĐÚNG ĐẮN NHẤT của em là:',
+    options: [
+      'A. Im lặng làm theo mọi yêu cầu của kẻ xấu vì sợ bị lộ.',
+      'B. Chụp màn hình toàn bộ tin nhắn để làm bằng chứng, chặn tài khoản đó và BÁO NGAY CHO BỐ MẸ, THẦY CÔ hoặc gọi Tổng đài 111 để được bảo vệ.',
+      'C. Chửi bới thách thức lại kẻ xấu trên mạng.',
+      'D. Giấu bố mẹ và đi vay tiền bạn bè để nộp cho kẻ xấu.'
+    ],
+    correct: 1,
+    explanation: 'Kẻ xấu sẽ không bao giờ dừng lại nếu em thỏa hiệp. Luôn lưu bằng chứng và báo ngay cho người lớn đáng tin cậy để được can thiệp kịp thời.'
+  },
+  {
+    id: 'hs_18',
+    skill: 'Xử lý sự cố',
+    q: 'Câu 18 (HS): Số điện thoại của TỔNG ĐÀI QUỐC GIA BẢO VỆ TRẺ EM tại Việt Nam (hỗ trợ miễn phí 24/7 khi học sinh bị xâm hại, bạo lực mạng, tống tiền) là số nào?',
+    options: [
+      'A. 113',
+      'B. 115',
+      'C. 111',
+      'D. 114'
+    ],
+    correct: 2,
+    explanation: 'Tổng đài 111 là đường dây nóng miễn phí của Nhà nước, trực 24/7 để tiếp nhận và can thiệp bảo vệ trẻ em, học sinh trong mọi tình huống khẩn cấp.'
+  }
+];
+
+// --- 3. BỘ 12 TÌNH HUỐNG THỰC HÀNH MÔ PHỎNG (SCENARIO SIMULATOR) ---
 const scenariosData = [
   {
     id: 1,
@@ -129,161 +607,81 @@ const scenariosData = [
     explanation: 'Hình ảnh khuôn mặt chất lượng cao kết hợp thông tin cá nhân có thể bị lợi dụng để huấn luyện AI Deepfake (giả mạo khuôn mặt gọi điện video lừa đảo người thân).',
     risk: 'Nguy cơ bị lạm dụng dữ liệu sinh trắc học để lừa đảo Deepfake tống tiền hoặc chiếm đoạt tài khoản ngân hàng.',
     bestAction: 'Thận trọng tối đa với các ứng dụng yêu cầu tải dữ liệu khuôn mặt và giấy tờ tùy thân.'
+  },
+  {
+    id: 9,
+    group: 'phishing',
+    groupName: 'Nhận diện Lừa đảo',
+    target: 'teacher',
+    question: 'Tình huống 9: Giáo viên nhận được một cuộc gọi thông báo: "Con của thầy/cô (hoặc học sinh trong lớp) bị tai nạn giao thông đang cấp cứu tại Bệnh viện đa khoa tỉnh, yêu cầu chuyển gấp viện phí 20 triệu đồng vào tài khoản viện phí khẩn cấp". Giáo viên xử lý thế nào?',
+    options: [
+      { text: 'A. Hoảng loạn chuyển tiền ngay lập tức để kịp cứu người.', isCorrect: false },
+      { text: 'B. Giữ bình tĩnh, không chuyển tiền; lập tức gọi điện cho nhà trường/gia đình học sinh hoặc bệnh viện qua số hotline chính thức để xác minh.', isCorrect: true },
+      { text: 'C. Đăng thông tin lên mạng xã hội kêu gọi quyên góp viện phí.', isCorrect: false },
+      { text: 'D. Tắt máy và không làm gì cả.', isCorrect: false }
+    ],
+    explanation: 'Đây là thủ đoạn lừa đảo "Con đang cấp cứu" nhắm vào tâm lý lo lắng của giáo viên và phụ huynh. Luôn bình tĩnh xác minh qua kênh chính thống.'
+  },
+  {
+    id: 10,
+    group: 'data',
+    groupName: 'Dữ liệu cá nhân',
+    target: 'student',
+    question: 'Tình huống 10: Trong giờ ra chơi, một bạn trong lớp để quên điện thoại trên bàn không khóa màn hình. Bạn khác rủ em mở điện thoại bạn lên xem trộm tin nhắn Zalo và ảnh riêng tư. Em sẽ:',
+    options: [
+      { text: 'A. Cùng xem trộm và chụp lại để trêu bạn.', isCorrect: false },
+      { text: 'B. Từ chối và nhắc nhở bạn không được xem trộm vì đó là xâm phạm quyền riêng tư, sau đó hỗ trợ cất điện thoại an toàn cho bạn.', isCorrect: true },
+      { text: 'C. Xem trộm một mình rồi không nói cho ai biết.', isCorrect: false },
+      { text: 'D. Cầm điện thoại đi giấu để dọa bạn.', isCorrect: false }
+    ],
+    explanation: 'Tôn trọng quyền riêng tư và bảo mật của người khác là phẩm chất quan trọng của công dân số văn minh trong nhà trường.'
+  },
+  {
+    id: 11,
+    group: 'account',
+    groupName: 'Mật khẩu & Tài khoản',
+    target: 'teacher',
+    question: 'Tình huống 11: Để tiện cho việc phụ đạo học sinh, giáo viên muốn lập một nhóm Zalo/Telegram. Để bảo đảm an toàn dữ liệu, giáo viên nên thiết lập như thế nào?',
+    options: [
+      { text: 'A. Mở link tham gia nhóm công khai để bất kỳ ai trên mạng cũng có thể tự do bấm vào tham gia.', isCorrect: false },
+      { text: 'B. Bật tính năng phê duyệt thành viên của trưởng nhóm, chỉ cho phép đúng phụ huynh/học sinh trong danh sách tham gia.', isCorrect: true },
+      { text: 'C. Đặt quyền phó nhóm cho tất cả học sinh.', isCorrect: false },
+      { text: 'D. Không cần cài đặt gì.', isCorrect: false }
+    ],
+    explanation: 'Nhóm lớp mở link công khai thường bị đối tượng xấu trà trộn vào phát tán tin nhắn rác, link lừa đảo hoặc hình ảnh độc hại.'
+  },
+  {
+    id: 12,
+    group: 'phishing',
+    groupName: 'Nhận diện Lừa đảo',
+    target: 'all',
+    question: 'Tình huống 12: Bạn nhận được tin nhắn SMS từ đầu số thông báo "Tài khoản ngân hàng/dịch vụ công của bạn bị khóa, vui lòng truy cập link `dichvucong-xacthuc.net` để mở khóa". Bạn sẽ:',
+    options: [
+      { text: 'A. Truy cập link và điền tài khoản mật khẩu ngay vì sợ bị khóa.', isCorrect: false },
+      { text: 'B. Nhận diện dấu hiệu giả mạo (cổng dịch vụ công quốc gia có tên miền đuôi .gov.vn), không bấm link và báo cáo tin nhắn rác tới tổng đài 156.', isCorrect: true },
+      { text: 'C. Chuyển tiếp tin nhắn cho người thân nhờ mở khóa hộ.', isCorrect: false },
+      { text: 'D. Gọi lại số điện thoại đó để chửi bới.', isCorrect: false }
+    ],
+    explanation: 'Các cơ quan nhà nước và ngân hàng chỉ dùng tên miền chính thống (đuôi .gov.vn hoặc .vn), không bao giờ dùng tên miền quốc tế (.net, .xyz, .top) để yêu cầu đăng nhập.'
   }
 ];
 
-// --- 12 Assessment Questions for Section 6 (Pre/Post Test) ---
-const quizQuestions = [
-  {
-    skill: 'Nhận diện dữ liệu cá nhân',
-    q: 'Câu 1: Theo quy định hiện hành, thông tin nào sau đây thuộc nhóm Dữ liệu cá nhân cần được bảo vệ?',
-    options: [
-      'A. Họ và tên, số điện thoại, ngày sinh, hình ảnh khuôn mặt cá nhân.',
-      'B. Địa chỉ cổng thông tin điện tử của Bộ Giáo dục & Đào tạo.',
-      'C. Tên danh lam thắng cảnh du lịch tại tỉnh Lạng Sơn.',
-      'D. Định lý Toán học hoặc kiến thức khoa học tự nhiên.'
-    ],
-    correct: 0
-  },
-  {
-    skill: 'Nhận diện dữ liệu cá nhân',
-    q: 'Câu 2: Trong trường học, tài liệu nào sau đây TUYỆT ĐỐI KHÔNG được tự ý chia sẻ công khai lên mạng xã hội?',
-    options: [
-      'A. Kế hoạch tổ chức lễ khai giảng năm học mới của nhà trường.',
-      'B. Bảng tổng hợp điểm số chi tiết kèm số định danh cá nhân/SĐT phụ huynh của học sinh.',
-      'C. Bài thơ chào mừng ngày Nhà giáo Việt Nam 20/11.',
-      'D. Lịch thi đấu thể thao giữa các lớp.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Bảo vệ tài khoản và mật khẩu',
-    q: 'Câu 3: Đâu là nguyên tắc tạo mật khẩu an toàn và đúng đắn nhất?',
-    options: [
-      'A. Dùng ngày tháng năm sinh hoặc số điện thoại cho dễ nhớ.',
-      'B. Dùng một mật khẩu duy nhất cho tất cả các tài khoản mạng xã hội và email.',
-      'C. Mật khẩu dài tối thiểu 10 ký tự, kết hợp chữ hoa, chữ thường, số, ký tự đặc biệt và bật xác thực 2 bước (2FA).',
-      'D. Ghi mật khẩu lên mảnh giấy rồi dán ngay trên màn hình máy tính.'
-    ],
-    correct: 2
-  },
-  {
-    skill: 'Bảo vệ tài khoản và mật khẩu',
-    q: 'Câu 4: Khi nhận được tin nhắn yêu cầu cung cấp mã xác thực OTP từ một người tự xưng là bạn bè hoặc cơ quan chức năng, bạn xử lý thế nào?',
-    options: [
-      'A. Đọc hoặc gửi mã OTP ngay vì họ là người quen.',
-      'B. Tuyệt đối không cung cấp mã OTP cho bất kỳ ai dưới mọi hình thức.',
-      'C. Cung cấp mã OTP nhưng yêu cầu họ dùng nhanh trong 5 phút.',
-      'D. Đổi mã OTP khác rồi mới gửi.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Nhận diện nguy cơ và lừa đảo',
-    q: 'Câu 5: Dấu hiệu nào sau đây giúp bạn nhận biết một đường liên kết (link) có nguy cơ lừa đảo giả mạo (Phishing)?',
-    options: [
-      'A. Tên miền có lỗi chính tả hoặc ký tự lạ cố tình nhái theo trang chính thức (ví dụ: g00gle-login.xyz thay vì google.com).',
-      'B. Nội dung tin nhắn mang tính chất thúc ép khẩn cấp: "Tài khoản sẽ bị khóa trong 10 phút nếu không bấm vào".',
-      'C. Đường link hứa hẹn trúng thưởng số tiền lớn hoặc nhận quà miễn phí bất ngờ.',
-      'D. Cả A, B và C đều là dấu hiệu lừa đảo.'
-    ],
-    correct: 3
-  },
-  {
-    skill: 'Nhận diện nguy cơ và lừa đảo',
-    q: 'Câu 6: Nếu một tài khoản Zalo/Facebook có tên và ảnh đại diện giống hệt giáo viên chủ nhiệm nhắn tin vay tiền gấp, hành động chuẩn là gì?',
-    options: [
-      'A. Chuyển tiền ngay để giúp thầy/cô.',
-      'B. Gọi điện thoại trực tiếp hoặc gặp trực tiếp thầy/cô để xác minh thông tin.',
-      'C. Chuyển tiếp tin nhắn cho các bạn trong lớp cùng quyên góp.',
-      'D. Hỏi số tài khoản rồi chuyển một nửa số tiền.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Quản lý quyền riêng tư',
-    q: 'Câu 7: Hành vi nào thể hiện kỹ năng quản lý quyền riêng tư tốt khi sử dụng mạng xã hội?',
-    options: [
-      'A. Luôn bật tính năng chia sẻ vị trí thời gian thực (check-in) mọi lúc mọi nơi.',
-      'B. Đặt quyền riêng tư bài viết phù hợp (bạn bè/chỉ mình tôi), kiểm tra danh sách ứng dụng được liên kết tài khoản định kỳ.',
-      'C. Kết bạn bừa bãi với tất cả người lạ trên mạng.',
-      'D. Công khai số điện thoại và địa chỉ nhà riêng lên trang cá nhân.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Quản lý quyền riêng tư',
-    q: 'Câu 8: Khi cài đặt một ứng dụng học tập hoặc trò chơi mới trên điện thoại, bạn nên chú ý điều gì?',
-    options: [
-      'A. Bấm "Cho phép tất cả các quyền" ngay để ứng dụng mở nhanh.',
-      'B. Chỉ cấp những quyền thực sự cần thiết (từ chối cấp quyền truy cập danh bạ, vị trí nếu ứng dụng không cần).',
-      'C. Không quan tâm ứng dụng đòi quyền gì.',
-      'D. Cấp quyền truy cập micro và camera vô điều kiện.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Sử dụng AI an toàn',
-    q: 'Câu 9: Khi sử dụng các công cụ trí tuệ nhân tạo (AI như ChatGPT, Gemini), quy tắc "3 câu hỏi" trước khi nhập dữ liệu là gì?',
-    options: [
-      'A. Đây có phải dữ liệu cá nhân không? – Có cần thiết đưa vào AI không? – Đã loại bỏ/ẩn danh thông tin nhận diện chưa?',
-      'B. AI có tính tiền không? – AI có nhanh không? – AI có thông minh không?',
-      'C. Bài toán này dễ hay khó? – AI có giải được không? – Có nên hỏi thêm không?',
-      'D. AI có nói tiếng Việt không? – Có cần lưu lịch sử không? – AI có chính xác không?'
-    ],
-    correct: 0
-  },
-  {
-    skill: 'Sử dụng AI an toàn',
-    q: 'Câu 10: Giáo viên muốn dùng AI để thiết kế nhận xét học bạ cuối kỳ cho học sinh. Cách làm an toàn nhất là:',
-    options: [
-      'A. Tải danh sách gồm cả họ tên thật, điểm số và số điện thoại lên công cụ AI.',
-      'B. Ẩn danh hóa: Chỉ đưa các dữ liệu đặc điểm (ví dụ: "Học sinh A: chăm chỉ, toán khá, môn văn cần cố gắng") mà không kèm họ tên hay trường lớp.',
-      'C. Gửi link trang quản lý giáo dục (VnEdu/SMAS) cho AI truy cập.',
-      'D. Nhờ người lạ dùng tài khoản AI của họ làm hộ.'
-    ],
-    correct: 1
-  },
-  {
-    skill: 'Xử lý sự cố',
-    q: 'Câu 11: Bước ĐẦU TIÊN cần làm ngay khi phát hiện tài khoản cá nhân có dấu hiệu bị lộ mật khẩu hoặc bị xâm nhập là gì?',
-    options: [
-      'A. Dừng ngay hành vi nguy cơ và tiến hành đổi mật khẩu ngay lập tức từ thiết bị an toàn, đăng xuất khỏi mọi thiết bị lạ.',
-      'B. Đi ngủ và đợi xem ngày mai tài khoản có bình thường lại không.',
-      'C. Xóa vĩnh viễn tài khoản và vứt điện thoại.',
-      'D. Đăng bài lên Facebook để trách móc người khác.'
-    ],
-    correct: 0
-  },
-  {
-    skill: 'Xử lý sự cố',
-    q: 'Câu 12: Khi học sinh phát hiện mình bị kẻ xấu trên mạng đe dọa, tống tiền hoặc phát tán thông tin giả mạo, học sinh nên liên hệ đầu mối nào?',
-    options: [
-      'A. Im lặng chịu đựng và làm theo mọi yêu cầu của kẻ xấu.',
-      'B. Báo ngay cho cha mẹ, Giáo viên chủ nhiệm, Ban Giám hiệu nhà trường và gọi Tổng đài Quốc gia Bảo vệ Trẻ em 111.',
-      'C. Đe dọa lại đối tượng trên mạng.',
-      'D. Rủ các bạn cùng lớp đi tìm kẻ xấu để giải quyết.'
-    ],
-    correct: 1
-  }
-];
-
-// App State
+// --- 4. APP STATE ---
 let currentView = 'home';
 let currentScenarioFilter = 'all';
-let userAnswers = {};
-let quizMode = 'pre'; // 'pre' or 'post'
-let currentRole = 'student';
+let currentTargetRole = 'teacher'; // 'teacher' hoặc 'student'
+let currentActiveQuestions = teacherQuizQuestions;
+let quizAnswers = {};
 
-// DOM Init
+// --- 5. KHỞI TẠO HỆ THỐNG (DOM INIT) ---
 document.addEventListener('DOMContentLoaded', () => {
   renderScenarios();
-  renderQuizQuestions();
   setupEventListeners();
   generateQRCode();
+  loadTargetRole(currentTargetRole);
 });
 
-// Navigation Handling
+// Chuyển đổi View mượt mà
 function navigateTo(viewId) {
   document.querySelectorAll('.section-view').forEach(view => {
     view.classList.remove('active');
@@ -299,7 +697,6 @@ function navigateTo(viewId) {
     renderQuizQuestions();
   }
   
-  // Update nav pills
   document.querySelectorAll('.nav-pill').forEach(pill => {
     if (pill.dataset.target === viewId) {
       pill.classList.add('active');
@@ -311,8 +708,8 @@ function navigateTo(viewId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Cấu hình Event Listeners
 function setupEventListeners() {
-  // Nav pills click
   document.querySelectorAll('.nav-pill').forEach(pill => {
     pill.addEventListener('click', (e) => {
       const target = e.currentTarget.dataset.target;
@@ -320,7 +717,6 @@ function setupEventListeners() {
     });
   });
 
-  // Portal cards click
   document.querySelectorAll('.portal-card').forEach(card => {
     card.addEventListener('click', (e) => {
       const target = e.currentTarget.dataset.target;
@@ -328,33 +724,34 @@ function setupEventListeners() {
     });
   });
 
-  // Back buttons click
   document.querySelectorAll('.back-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       navigateTo('home');
     });
   });
 
-  // Logo click
-  document.getElementById('brandLogo').addEventListener('click', () => {
-    navigateTo('home');
-  });
+  const logo = document.getElementById('brandLogo');
+  if (logo) {
+    logo.addEventListener('click', () => navigateTo('home'));
+  }
 
-  // QR Modal triggers
+  // QR Modal
   const qrModal = document.getElementById('qrModal');
-  document.getElementById('openQrBtn').addEventListener('click', () => {
-    qrModal.classList.add('open');
-  });
-  document.getElementById('closeQrBtn').addEventListener('click', () => {
-    qrModal.classList.remove('open');
-  });
-  qrModal.addEventListener('click', (e) => {
-    if (e.target === qrModal) {
-      qrModal.classList.remove('open');
-    }
-  });
+  const openQrBtn = document.getElementById('openQrBtn');
+  const closeQrBtn = document.getElementById('closeQrBtn');
+  if (openQrBtn && qrModal) {
+    openQrBtn.addEventListener('click', () => qrModal.classList.add('open'));
+  }
+  if (closeQrBtn && qrModal) {
+    closeQrBtn.addEventListener('click', () => qrModal.classList.remove('open'));
+  }
+  if (qrModal) {
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) qrModal.classList.remove('open');
+    });
+  }
 
-  // Filter Scenarios
+  // Lọc tình huống
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -370,7 +767,7 @@ function setupEventListeners() {
     pwInput.addEventListener('input', checkPasswordStrength);
   }
 
-  // Quiz Mode Tabs
+  // Chuyển đổi chế độ Đánh giá / Khảo sát
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
@@ -381,11 +778,42 @@ function setupEventListeners() {
   });
 }
 
-// Generate Scannable QR Code
+// Chuyển đổi đối tượng làm bài (Giáo viên vs Học sinh)
+window.switchQuizRole = function(role) {
+  currentTargetRole = role;
+  loadTargetRole(role);
+};
+
+function loadTargetRole(role) {
+  const gvBtn = document.getElementById('roleBtnTeacher');
+  const hsBtn = document.getElementById('roleBtnStudent');
+  const infoText = document.getElementById('quizRoleInfoText');
+
+  if (role === 'teacher') {
+    currentActiveQuestions = teacherQuizQuestions;
+    if (gvBtn) gvBtn.classList.add('active');
+    if (hsBtn) hsBtn.classList.remove('active');
+    if (infoText) {
+      infoText.innerHTML = `🎓 <strong>Bộ đề kiểm tra dành cho Giáo viên (18 câu nghiệp vụ sư phạm)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Bảo mật điểm số, hồ sơ lớp, quy tắc ảnh học sinh, AI soạn bài, lừa đảo công văn ngành, Luật 91/2025/QH15.</span>`;
+    }
+  } else {
+    currentActiveQuestions = studentQuizQuestions;
+    if (gvBtn) gvBtn.classList.remove('active');
+    if (hsBtn) hsBtn.classList.add('active');
+    if (infoText) {
+      infoText.innerHTML = `🎒 <strong>Bộ đề kiểm tra dành cho Học sinh (18 câu học đường & mạng xã hội)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Tài khoản học trực tuyến, bẫy game/học bổng ảo, bạo lực mạng, trào lưu AI nhạy cảm, số khẩn cấp 111.</span>`;
+    }
+  }
+
+  quizAnswers = {};
+  const resBox = document.getElementById('quizResultBox');
+  if (resBox) resBox.style.display = 'none';
+  renderQuizQuestions();
+}
+
+// Tạo mã QR chuẩn xác
 function generateQRCode() {
-  let currentUrl = window.location.href;
-    // Đường link chính thức trên Vercel để quét mã QR truy cập
-    currentUrl = 'https://safe-ls.vercel.app';
+  const currentUrl = 'https://safe-ls.vercel.app';
   const qrImg = document.getElementById('qrImageDisplay');
   const qrText = document.getElementById('qrUrlText');
   
@@ -396,7 +824,7 @@ function generateQRCode() {
   }
 }
 
-// Render Interactive Scenarios (Section 4)
+// Render 12 tình huống mô phỏng
 function renderScenarios() {
   const container = document.getElementById('scenariosContainer');
   if (!container) return;
@@ -425,7 +853,7 @@ function renderScenarios() {
   `).join('');
 }
 
-// Handle Scenario Option Selection
+// Xử lý chọn đáp án tình huống
 window.selectScenarioOption = function(scenarioId, optionIdx) {
   const scenario = scenariosData.find(s => s.id === scenarioId);
   if (!scenario) return;
@@ -456,7 +884,7 @@ window.selectScenarioOption = function(scenarioId, optionIdx) {
   `;
 };
 
-// Password Strength Simulator (Section 3)
+// Kiểm tra mật khẩu mô phỏng
 function checkPasswordStrength(e) {
   const val = e.target.value;
   const fill = document.getElementById('pwStrengthFill');
@@ -480,7 +908,7 @@ function checkPasswordStrength(e) {
 
   if (score < 40) {
     fill.style.background = '#ef4444';
-    text.textContent = 'Mức độ: Rất yếu (Dễ bị dò quét bằng từ điển)';
+    text.textContent = 'Mức độ: Rất yếu (Dễ bị bẻ khóa trong vài giây)';
     text.style.color = '#dc2626';
   } else if (score < 75) {
     fill.style.background = '#f59e0b';
@@ -488,12 +916,12 @@ function checkPasswordStrength(e) {
     text.style.color = '#d97706';
   } else {
     fill.style.background = '#10b981';
-    text.textContent = 'Mức độ: Rất mạnh (Đáp ứng tiêu chuẩn an toàn SAFE-LS)';
+    text.textContent = 'Mức độ: Rất mạnh (Đạt chuẩn bảo mật SAFE-LS)';
     text.style.color = '#059669';
   }
 }
 
-// Assessment Mode Toggle (Section 6)
+// Chuyển đổi tab Kiểm tra và Khảo sát
 function toggleAssessmentMode(mode) {
   const testBox = document.getElementById('quizTestBox');
   const surveyBox = document.getElementById('surveyBox');
@@ -508,23 +936,23 @@ function toggleAssessmentMode(mode) {
   }
 }
 
-// Render 12 Quiz Questions
+// Render câu hỏi trắc nghiệm (18 câu)
 function renderQuizQuestions() {
   const container = document.getElementById('quizQuestionsContainer');
   if (!container) return;
 
-  container.innerHTML = quizQuestions.map((q, qIdx) => `
-    <div class="content-box" style="margin-bottom: 1.25rem; background: #ffffff;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+  container.innerHTML = currentActiveQuestions.map((q, qIdx) => `
+    <div class="content-box" style="margin-bottom: 1.15rem; background: #ffffff;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.35rem;">
         <span class="badge-tag">${q.skill}</span>
-        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Câu ${qIdx + 1} / 12</span>
+        <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Câu ${qIdx + 1} / ${currentActiveQuestions.length}</span>
       </div>
       <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.75rem;">${q.q}</div>
       <div class="options-list">
         ${q.options.map((opt, optIdx) => `
-          <label style="display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 0.85rem; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;">
-            <input type="radio" name="quiz_q_${qIdx}" value="${optIdx}" onchange="recordQuizAnswer(${qIdx}, ${optIdx})">
-            <span>${opt}</span>
+          <label style="display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0.85rem; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: background 0.15s ease;">
+            <input type="radio" name="quiz_q_${qIdx}" value="${optIdx}" style="margin-top: 0.25rem;" onchange="recordQuizAnswer(${qIdx}, ${optIdx})">
+            <span style="font-size: 0.92rem; color: #1e293b;">${opt}</span>
           </label>
         `).join('')}
       </div>
@@ -532,23 +960,22 @@ function renderQuizQuestions() {
   `).join('');
 }
 
-let quizAnswers = {};
 window.recordQuizAnswer = function(qIdx, optIdx) {
   quizAnswers[qIdx] = optIdx;
 };
 
-// Submit Quiz and calculate 4-Level Evaluation
-window.submitQuiz = function() {
+// Chấm điểm và Tự động gửi kết quả về Google Sheets
+window.submitQuiz = async function() {
   const answeredCount = Object.keys(quizAnswers).length;
-  if (answeredCount < quizQuestions.length) {
-    alert(`Bạn còn ${quizQuestions.length - answeredCount} câu chưa hoàn thành. Vui lòng làm hết 12 câu để có kết quả chính xác nhất!`);
+  if (answeredCount < currentActiveQuestions.length) {
+    alert(`Bạn còn ${currentActiveQuestions.length - answeredCount} câu chưa hoàn thành. Vui lòng làm đủ ${currentActiveQuestions.length} câu để có kết quả chính xác nhất!`);
     return;
   }
 
   let correctCount = 0;
   const skillScores = {};
 
-  quizQuestions.forEach((q, idx) => {
+  currentActiveQuestions.forEach((q, idx) => {
     if (!skillScores[q.skill]) {
       skillScores[q.skill] = { total: 0, correct: 0 };
     }
@@ -560,37 +987,59 @@ window.submitQuiz = function() {
     }
   });
 
-  const percentage = Math.round((correctCount / quizQuestions.length) * 100);
+  const percentage = Math.round((correctCount / currentActiveQuestions.length) * 100);
 
-  // 4-level scale from Proposal Part IV.2
+  // Thang 4 mức theo đề án (Phần IV.2)
   let level = '';
-  let levelClass = '';
   let levelDesc = '';
 
   if (percentage < 50) {
     level = 'Mức 1 – Chưa đạt';
-    levelClass = 'is-wrong';
     levelDesc = 'Chưa nhận diện hoặc xử lý đúng tình huống an toàn dữ liệu. Cần tham gia ngay các khóa bồi dưỡng mô hình SAFE-LS.';
   } else if (percentage < 70) {
     level = 'Mức 2 – Đạt một phần';
-    levelClass = 'is-wrong';
     levelDesc = 'Có nhận biết cơ bản về dữ liệu cá nhân nhưng chưa biết cách xử lý đầy đủ khi gặp nguy cơ mạng.';
   } else if (percentage < 85) {
     level = 'Mức 3 – Đạt';
-    levelClass = 'is-correct';
     levelDesc = 'Có khả năng nhận diện và xử lý cơ bản các nguy cơ bảo mật tài khoản và quyền riêng tư trong môi trường số.';
   } else {
     level = 'Mức 4 – Thành thạo';
-    levelClass = 'is-correct';
     levelDesc = 'Có khả năng nhận diện nhanh, lựa chọn biện pháp phù hợp và biết tìm kiếm hỗ trợ khi cần thiết. Đạt chuẩn kỹ năng SAFE-LS!';
   }
+
+  const participantName = document.getElementById('participantNameInput')?.value.trim() || 'Ẩn danh';
+  const participantOrg = document.getElementById('participantOrgInput')?.value.trim() || 'Lạng Sơn';
+
+  // Chuẩn bị payload gửi về Google Sheets & Lưu Admin
+  const submissionData = {
+    timestamp: new Date().toLocaleString('vi-VN'),
+    role: currentTargetRole === 'teacher' ? 'Giáo viên' : 'Học sinh',
+    name: participantName,
+    organization: participantOrg,
+    score: `${correctCount}/${currentActiveQuestions.length}`,
+    percentage: percentage,
+    level: level,
+    skill1: skillScores['Nhận diện dữ liệu cá nhân'] ? `${skillScores['Nhận diện dữ liệu cá nhân'].correct}/${skillScores['Nhận diện dữ liệu cá nhân'].total}` : 'N/A',
+    skill2: skillScores['Bảo vệ tài khoản và mật khẩu'] ? `${skillScores['Bảo vệ tài khoản và mật khẩu'].correct}/${skillScores['Bảo vệ tài khoản và mật khẩu'].total}` : 'N/A',
+    skill3: skillScores['Nhận diện nguy cơ và lừa đảo'] ? `${skillScores['Nhận diện nguy cơ và lừa đảo'].correct}/${skillScores['Nhận diện nguy cơ và lừa đảo'].total}` : 'N/A',
+    skill4: skillScores['Quản lý quyền riêng tư'] ? `${skillScores['Quản lý quyền riêng tư'].correct}/${skillScores['Quản lý quyền riêng tư'].total}` : 'N/A',
+    skill5: skillScores['Sử dụng AI an toàn'] ? `${skillScores['Sử dụng AI an toàn'].correct}/${skillScores['Sử dụng AI an toàn'].total}` : 'N/A',
+    skill6: skillScores['Xử lý sự cố'] ? `${skillScores['Xử lý sự cố'].correct}/${skillScores['Xử lý sự cố'].total}` : 'N/A'
+  };
+
+  // Lưu lịch sử vào LocalStorage cho Admin Dashboard
+  saveSubmissionLocally(submissionData);
+
+  // Tự động gửi về Google Sheets nếu có cấu hình
+  const syncStatus = await sendToGoogleSheet(submissionData);
 
   const resultBox = document.getElementById('quizResultBox');
   resultBox.style.display = 'block';
   resultBox.innerHTML = `
     <div style="text-align: center; margin-bottom: 1.25rem;">
       <h3 style="font-size: 1.35rem; color: #1e3a8a; margin-bottom: 0.35rem;">KẾT QUẢ ĐÁNH GIÁ KỸ NĂNG SAFE-LS</h3>
-      <div style="font-size: 2.25rem; font-weight: 800; color: #1d4ed8;">${percentage}% (${correctCount}/12 câu đúng)</div>
+      <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 0.5rem;">Người làm bài: <strong>${participantName}</strong> (${participantOrg}) · Đối tượng: <strong>${submissionData.role}</strong></div>
+      <div style="font-size: 2.25rem; font-weight: 800; color: #1d4ed8;">${percentage}% (${correctCount}/${currentActiveQuestions.length} câu đúng)</div>
       <div style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-top: 0.25rem;">Xếp loại: <span class="badge-tag" style="font-size: 1rem;">${level}</span></div>
       <p style="color: #475569; max-width: 650px; margin: 0.5rem auto 0;">${levelDesc}</p>
     </div>
@@ -613,7 +1062,41 @@ window.submitQuiz = function() {
         `;
       }).join('')}
     </div>
+
+    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 0.75rem 1rem; text-align: center; font-size: 0.88rem; color: #15803d; font-weight: 600;">
+      ${syncStatus ? '✅ Kết quả đã tự động lưu thành công vào Google Sheets của cô giáo!' : '💾 Kết quả đã được ghi nhận vào hệ thống SAFE-LS!'}
+    </div>
   `;
 
   resultBox.scrollIntoView({ behavior: 'smooth' });
 };
+
+// Lưu dữ liệu vào LocalStorage
+function saveSubmissionLocally(data) {
+  try {
+    const list = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
+    list.unshift(data);
+    localStorage.setItem('safels_submissions', JSON.stringify(list));
+  } catch (err) {
+    console.warn('LocalStorage error:', err);
+  }
+}
+
+// Hàm gửi dữ liệu sang Google Sheets Webhook
+async function sendToGoogleSheet(data) {
+  const webhookUrl = localStorage.getItem('safels_gsheet_url') || '';
+  if (!webhookUrl) return false;
+
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return true;
+  } catch (err) {
+    console.error('Lỗi gửi Google Sheets:', err);
+    return false;
+  }
+}
