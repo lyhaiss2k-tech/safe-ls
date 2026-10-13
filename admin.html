@@ -129,6 +129,9 @@
             <p style="font-size: 0.88rem; color: #64748b;">Quản lý dữ liệu khảo sát thực nghiệm & cấu hình đồng bộ Google Sheets</p>
           </div>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="secondary-btn" id="btnSyncGSheet" onclick="syncDataFromGSheet()" style="padding: 0.55rem 0.85rem; font-size: 0.84rem; font-weight: 700; color: #1d4ed8; border-color: #93c5fd; background: #eff6ff;">
+              🔄 Đồng Bộ Từ Google Sheets
+            </button>
             <button class="primary-btn" onclick="exportDataToCSV('all')" style="padding: 0.55rem 0.85rem; font-size: 0.84rem;">
               📥 Xuất Tất Cả (CSV)
             </button>
@@ -223,20 +226,18 @@
             </ol>
 
             <div class="code-block" id="appsScriptCode">
+// 1. NHẬN BÀI LÀM VÀ TỰ ĐỘNG TÁCH 2 TRANG TÍNH (GIÁO VIÊN & HỌC SINH)
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var data = JSON.parse(e.postData.contents);
   
-  // 1. Phân loại trang tính riêng biệt cho Giáo viên và Học sinh
   var targetSheetName = (data.role && data.role.indexOf("Giáo viên") !== -1) ? "Giáo viên" : "Học sinh";
   var sheet = ss.getSheetByName(targetSheetName);
   
-  // Tự động tạo trang tính mới nếu chưa có
   if (!sheet) {
     sheet = ss.insertSheet(targetSheetName);
   }
   
-  // 2. Tự động tạo hàng tiêu đề nếu là lần đầu tiên trang tính được tạo
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
       "Thời gian", "Đối tượng", "Họ tên", "Trường/Lớp", 
@@ -246,7 +247,6 @@ function doPost(e) {
     ]);
   }
   
-  // 3. Ghi kết quả mới vào đúng trang tính tương ứng
   sheet.appendRow([
     data.timestamp, data.role, data.name, data.organization,
     data.score, data.percentage + "%", data.level,
@@ -254,8 +254,60 @@ function doPost(e) {
     data.skill4, data.skill5, data.skill6
   ]);
   
-  return ContentService.createTextOutput(JSON.stringify({result: "success"}))
+  return ContentService.createTextOutput(JSON.stringify({ result: "success" }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// 2. GỬI DỮ LIỆU TỪ GOOGLE SHEETS VỀ TRANG ADMIN (ĐỒNG BỘ 2 CHIỀU)
+function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var results = [];
+  var sheetNames = ["Giáo viên", "Học sinh", "Trang tính 1"];
+  
+  sheetNames.forEach(function(name) {
+    var sheet = ss.getSheetByName(name);
+    if (sheet && sheet.getLastRow() > 1) {
+      var numRows = sheet.getLastRow() - 1;
+      var numCols = Math.min(sheet.getLastColumn(), 13);
+      var values = sheet.getRange(2, 1, numRows, numCols).getValues();
+      
+      values.forEach(function(row) {
+        if (row[0] || row[2]) {
+          var pctVal = row[5];
+          if (typeof pctVal === "string") {
+            pctVal = parseInt(pctVal.replace("%", "").trim()) || 0;
+          } else if (typeof pctVal === "number") {
+            pctVal = Math.round(pctVal > 1 ? pctVal : pctVal * 100);
+          } else {
+            pctVal = 0;
+          }
+          
+          results.push({
+            timestamp: row[0] ? String(row[0]) : "",
+            role: row[1] ? String(row[1]) : (name === "Giáo viên" ? "Giáo viên" : "Học sinh"),
+            name: row[2] ? String(row[2]) : "Ẩn danh",
+            organization: row[3] ? String(row[3]) : "",
+            score: row[4] ? String(row[4]) : "",
+            percentage: pctVal,
+            level: row[6] ? String(row[6]) : "",
+            skill1: row[7] ? String(row[7]) : "",
+            skill2: row[8] ? String(row[8]) : "",
+            skill3: row[9] ? String(row[9]) : "",
+            skill4: row[10] ? String(row[10]) : "",
+            skill5: row[11] ? String(row[11]) : "",
+            skill6: row[12] ? String(row[12]) : ""
+          });
+        }
+      });
+    }
+  });
+  
+  results.reverse();
+  return ContentService.createTextOutput(JSON.stringify({
+    status: "success",
+    total: results.length,
+    data: results
+  })).setMimeType(ContentService.MimeType.JSON);
 }</div>
 
             <button class="secondary-btn" style="margin-bottom: 1rem; font-size: 0.84rem;" onclick="copyAppsScript()">
@@ -319,6 +371,7 @@ function doPost(e) {
         document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
         loadAdminStats();
         loadGSheetConfig();
+        syncDataFromGSheet(true); // Tự động đồng bộ ngay khi đăng nhập
         switchQuestionView('gv');
       } else {
         err.style.display = 'block';
@@ -498,7 +551,47 @@ function doPost(e) {
       const url = document.getElementById('gsheetUrlInput').value.trim();
       localStorage.setItem('safels_gsheet_url', url);
       loadGSheetConfig();
-      alert('Đã lưu cấu hình URL Google Sheets!');
+      syncDataFromGSheet(false);
+    }
+
+    async function syncDataFromGSheet(silent = false) {
+      const url = localStorage.getItem('safels_gsheet_url');
+      if (!url) {
+        if (!silent) alert('Bạn chưa cấu hình URL Google Sheets! Vui lòng vào tab "Cấu hình Google Sheets" để lưu URL Webhook.');
+        return;
+      }
+
+      const syncBtn = document.getElementById('btnSyncGSheet');
+      if (syncBtn) {
+        syncBtn.disabled = true;
+        syncBtn.innerHTML = '⏳ Đang đồng bộ...';
+      }
+
+      try {
+        const response = await fetch(url);
+        const result = await response.json();
+        
+        if (result && result.status === 'success' && Array.isArray(result.data)) {
+          // Ghi đè toàn bộ dữ liệu mới nhất từ Google Sheets vào LocalStorage
+          localStorage.setItem('safels_submissions', JSON.stringify(result.data));
+          loadAdminStats();
+          if (!silent) {
+            alert(`✅ Đã đồng bộ thành công! Hiện có ${result.data.length} lượt bài làm thực tế từ Google Sheets.`);
+          }
+        } else {
+          if (!silent) alert('Không thể đọc dữ liệu từ Google Sheets. Hãy đảm bảo bạn đã triển khai phiên bản mới của Apps Script có hàm doGet.');
+        }
+      } catch (err) {
+        console.error('Lỗi đồng bộ Google Sheets:', err);
+        if (!silent) {
+          alert('Không thể kết nối đến Google Sheets! Hãy kiểm tra lại URL Webhook hoặc chọn "Phiên bản mới" (New version) khi Triển khai trong Apps Script.');
+        }
+      } finally {
+        if (syncBtn) {
+          syncBtn.disabled = false;
+          syncBtn.innerHTML = '🔄 Đồng Bộ Từ Google Sheets';
+        }
+      }
     }
 
     async function testGSheetConnection() {
