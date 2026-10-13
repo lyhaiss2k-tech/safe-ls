@@ -128,9 +128,15 @@
             <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a;">Bảng Quản Trị Nghiên Cứu SAFE-LS</h2>
             <p style="font-size: 0.88rem; color: #64748b;">Quản lý dữ liệu khảo sát thực nghiệm & cấu hình đồng bộ Google Sheets</p>
           </div>
-          <div style="display: flex; gap: 0.5rem;">
-            <button class="primary-btn" onclick="exportDataToCSV()" style="padding: 0.6rem 1rem; font-size: 0.88rem;">
-              📥 Xuất File Excel (CSV)
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="primary-btn" onclick="exportDataToCSV('all')" style="padding: 0.55rem 0.85rem; font-size: 0.84rem;">
+              📥 Xuất Tất Cả (CSV)
+            </button>
+            <button class="secondary-btn" onclick="exportDataToCSV('teacher')" style="padding: 0.55rem 0.85rem; font-size: 0.84rem; background: #f0fdf4; border-color: #86efac; color: #166534; font-weight: 700;">
+              🎓 Xuất Giáo Viên
+            </button>
+            <button class="secondary-btn" onclick="exportDataToCSV('student')" style="padding: 0.55rem 0.85rem; font-size: 0.84rem; background: #faf5ff; border-color: #d8b4fe; color: #6b21a8; font-weight: 700;">
+              🎒 Xuất Học Sinh
             </button>
           </div>
         </div>
@@ -165,7 +171,14 @@
 
           <div class="content-box" style="background: #ffffff; padding: 1.25rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
-              <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b;">Danh sách chi tiết kết quả làm bài mới nhất</h3>
+              <div>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem;">Danh sách chi tiết kết quả làm bài mới nhất</h3>
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                  <button class="filter-btn active" id="tblFilterAll" onclick="filterTable('all')" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">Tất cả</button>
+                  <button class="filter-btn" id="tblFilterTeacher" onclick="filterTable('Giáo viên')" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">🎓 Giáo viên</button>
+                  <button class="filter-btn" id="tblFilterStudent" onclick="filterTable('Học sinh')" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">🎒 Học sinh</button>
+                </div>
+              </div>
               <div style="display: flex; gap: 0.5rem;">
                 <button class="secondary-btn" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;" onclick="addSampleData()">
                   ➕ Nạp số liệu mẫu
@@ -211,10 +224,19 @@
 
             <div class="code-block" id="appsScriptCode">
 function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
   var data = JSON.parse(e.postData.contents);
   
-  // Tự động tạo hàng tiêu đề nếu là lần đầu tiên
+  // 1. Phân loại trang tính riêng biệt cho Giáo viên và Học sinh
+  var targetSheetName = (data.role && data.role.indexOf("Giáo viên") !== -1) ? "Giáo viên" : "Học sinh";
+  var sheet = ss.getSheetByName(targetSheetName);
+  
+  // Tự động tạo trang tính mới nếu chưa có
+  if (!sheet) {
+    sheet = ss.insertSheet(targetSheetName);
+  }
+  
+  // 2. Tự động tạo hàng tiêu đề nếu là lần đầu tiên trang tính được tạo
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
       "Thời gian", "Đối tượng", "Họ tên", "Trường/Lớp", 
@@ -224,7 +246,7 @@ function doPost(e) {
     ]);
   }
   
-  // Ghi kết quả mới vào trang tính
+  // 3. Ghi kết quả mới vào đúng trang tính tương ứng
   sheet.appendRow([
     data.timestamp, data.role, data.name, data.organization,
     data.score, data.percentage + "%", data.level,
@@ -322,6 +344,16 @@ function doPost(e) {
       });
     });
 
+    let currentTableFilter = 'all';
+
+    function filterTable(role) {
+      currentTableFilter = role;
+      document.getElementById('tblFilterAll').classList.toggle('active', role === 'all');
+      document.getElementById('tblFilterTeacher').classList.toggle('active', role === 'Giáo viên');
+      document.getElementById('tblFilterStudent').classList.toggle('active', role === 'Học sinh');
+      renderSubmissionsTable();
+    }
+
     // Load thống kê từ LocalStorage
     function loadAdminStats() {
       const submissions = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
@@ -342,13 +374,23 @@ function doPost(e) {
       const passRate = submissions.length > 0 ? Math.round((passCount / submissions.length) * 100) : 0;
       document.getElementById('kpiPassRate').textContent = passRate + '%';
 
+      renderSubmissionsTable();
+    }
+
+    function renderSubmissionsTable() {
+      const submissions = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
+      const filtered = submissions.filter(s => {
+        if (currentTableFilter === 'all') return true;
+        return s.role === currentTableFilter;
+      });
+
       const tbody = document.getElementById('submissionsTableBody');
-      if (submissions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 2rem;">Chưa có lượt làm bài nào được ghi nhận.</td></tr>`;
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 2rem;">Chưa có lượt làm bài nào phù hợp với bộ lọc này.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = submissions.map(s => `
+      tbody.innerHTML = filtered.map(s => `
         <tr>
           <td><span style="font-size: 0.8rem; color: #64748b;">${s.timestamp}</span></td>
           <td><span class="badge-tag">${s.role}</span></td>
@@ -361,18 +403,25 @@ function doPost(e) {
       `).join('');
     }
 
-    // Xuất dữ liệu CSV (Tương thích Excel với UTF-8 BOM)
-    function exportDataToCSV() {
+    // Xuất dữ liệu CSV (Tương thích Excel với UTF-8 BOM, hỗ trợ lọc theo đối tượng)
+    function exportDataToCSV(roleFilter = 'all') {
       const submissions = JSON.parse(localStorage.getItem('safels_submissions') || '[]');
-      if (submissions.length === 0) {
-        alert('Chưa có dữ liệu để xuất file Excel!');
+      const filtered = submissions.filter(s => {
+        if (roleFilter === 'all') return true;
+        if (roleFilter === 'teacher') return s.role === 'Giáo viên';
+        if (roleFilter === 'student') return s.role === 'Học sinh';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        alert('Không có dữ liệu phù hợp để xuất file Excel!');
         return;
       }
 
       let csv = '\uFEFF'; // UTF-8 BOM for Excel
       csv += 'Thời gian,Đối tượng,Họ tên,Trường/Lớp,Điểm số,Phần trăm,Xếp loại,1. Nhận diện DLCN,2. Bảo vệ tài khoản,3. Lừa đảo,4. Quyền riêng tư,5. AI an toàn,6. Xử lý sự cố\n';
 
-      submissions.forEach(s => {
+      filtered.forEach(s => {
         csv += `"${s.timestamp}","${s.role}","${s.name}","${s.organization}","${s.score}","${s.percentage}%","${s.level}","${s.skill1}","${s.skill2}","${s.skill3}","${s.skill4}","${s.skill5}","${s.skill6}"\n`;
       });
 
@@ -380,7 +429,8 @@ function doPost(e) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', `SAFE_LS_Du_Lieu_Khao_Sat_${new Date().toISOString().slice(0, 10)}.csv`);
+      const suffix = roleFilter === 'teacher' ? 'Giao_Vien' : (roleFilter === 'student' ? 'Hoc_Sinh' : 'Tat_Ca');
+      link.setAttribute('download', `SAFE_LS_Du_Lieu_${suffix}_${new Date().toISOString().slice(0, 10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
