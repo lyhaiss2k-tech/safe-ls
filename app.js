@@ -735,8 +735,28 @@ let currentView = 'home';
 let currentScenarioFilter = 'all';
 let currentScenarioRole = 'teacher'; // 'teacher' hoặc 'student'
 let currentTargetRole = 'teacher'; // 'teacher' hoặc 'student'
-let currentActiveQuestions = teacherQuizQuestions;
+
+// Lấy danh sách câu hỏi đang hoạt động (Ưu tiên tùy chỉnh từ Admin trong LocalStorage)
+function getActiveQuestions(role) {
+  const isTeacher = (role === 'teacher' || role === 'gv');
+  const key = isTeacher ? 'safels_custom_teacher_questions' : 'safels_custom_student_questions';
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Lỗi đọc ngân hàng câu hỏi từ LocalStorage:', err);
+  }
+  return isTeacher ? teacherQuizQuestions : studentQuizQuestions;
+}
+
+let currentActiveQuestions = getActiveQuestions('teacher');
 let quizAnswers = {};
+
 
 // --- 5. KHỞI TẠO HỆ THỐNG (DOM INIT) ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -854,19 +874,19 @@ function loadTargetRole(role) {
   const hsBtn = document.getElementById('roleBtnStudent');
   const infoText = document.getElementById('quizRoleInfoText');
 
+  currentActiveQuestions = getActiveQuestions(role);
+
   if (role === 'teacher') {
-    currentActiveQuestions = teacherQuizQuestions;
     if (gvBtn) gvBtn.classList.add('active');
     if (hsBtn) hsBtn.classList.remove('active');
     if (infoText) {
-      infoText.innerHTML = `🎓 <strong>Bộ đề kiểm tra dành cho Giáo viên (18 câu nghiệp vụ sư phạm)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Bảo mật điểm số, hồ sơ lớp, quy tắc ảnh học sinh, AI soạn bài, lừa đảo công văn ngành, Luật 91/2025/QH15.</span>`;
+      infoText.innerHTML = `🎓 <strong>Bộ đề kiểm tra dành cho Giáo viên (${currentActiveQuestions.length} câu nghiệp vụ sư phạm)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Bảo mật điểm số, hồ sơ lớp, quy tắc ảnh học sinh, AI soạn bài, lừa đảo công văn ngành, Luật 91/2025/QH15.</span>`;
     }
   } else {
-    currentActiveQuestions = studentQuizQuestions;
     if (gvBtn) gvBtn.classList.remove('active');
     if (hsBtn) hsBtn.classList.add('active');
     if (infoText) {
-      infoText.innerHTML = `🎒 <strong>Bộ đề kiểm tra dành cho Học sinh (18 câu học đường & mạng xã hội)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Tài khoản học trực tuyến, bẫy game/học bổng ảo, bạo lực mạng, trào lưu AI nhạy cảm, số khẩn cấp 111.</span>`;
+      infoText.innerHTML = `🎒 <strong>Bộ đề kiểm tra dành cho Học sinh (${currentActiveQuestions.length} câu học đường & mạng xã hội)</strong><br><span style="font-size: 0.84rem; color: #475569;">Bao gồm: Tài khoản học trực tuyến, bẫy game/học bổng ảo, bạo lực mạng, trào lưu AI nhạy cảm, số khẩn cấp 111.</span>`;
     }
   }
 
@@ -1190,6 +1210,10 @@ function saveSubmissionLocally(data) {
 window.DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
 window.teacherQuizQuestions = typeof teacherQuizQuestions !== 'undefined' ? teacherQuizQuestions : [];
 window.studentQuizQuestions = typeof studentQuizQuestions !== 'undefined' ? studentQuizQuestions : [];
+window.DEFAULT_TEACHER_QUESTIONS = window.teacherQuizQuestions;
+window.DEFAULT_STUDENT_QUESTIONS = window.studentQuizQuestions;
+window.getActiveQuestions = getActiveQuestions;
+
 
 // Hàm gửi dữ liệu sang Google Sheets Webhook
 async function sendToGoogleSheet(data) {

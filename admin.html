@@ -71,6 +71,94 @@
       .kpi-grid {
         grid-template-columns: 1fr;
       }
+    /* Modal Quản trị câu hỏi */
+    .admin-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .admin-modal-overlay.open {
+      display: flex;
+    }
+    .admin-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      padding: 1.5rem;
+    }
+    .modal-form-group {
+      margin-bottom: 1rem;
+    }
+    .modal-form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 0.35rem;
+    }
+    .modal-form-group input[type="text"],
+    .modal-form-group select,
+    .modal-form-group textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .modal-form-group textarea {
+      resize: vertical;
+    }
+    .modal-opt-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .modal-opt-row input[type="text"] {
+      flex: 1;
+    }
+    .modal-opt-row input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .question-manage-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+      transition: box-shadow 0.2s ease;
+    }
+    .question-manage-card:hover {
+      box-shadow: var(--shadow-sm);
+    }
+    .opt-preview-item {
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      margin-bottom: 0.35rem;
+      border: 1px solid #f1f5f9;
+      background: #f8fafc;
+      color: #334155;
+    }
+    .opt-preview-item.is-correct {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -391,17 +479,38 @@ function doGet(e) {
         <!-- TAB 3: NGÂN HÀNG CÂU HỎI -->
         <div id="tab-questions" class="admin-tab-content" style="display: none;">
           <div class="content-box highlight-green">
-            <h3 class="box-title">Ngân hàng câu hỏi chuẩn mô hình SAFE-LS (Đang áp dụng)</h3>
+            <h3 class="box-title">Ngân hàng câu hỏi chuẩn mô hình SAFE-LS (Hỗ trợ Thêm / Sửa / Xóa)</h3>
             <p style="font-size: 0.88rem; color: #475569;">
-              Hệ thống hiện đang vận hành với <strong>18 câu trắc nghiệm chuyên sâu cho Giáo viên</strong> và <strong>18 câu thực tế cho Học sinh</strong>, bao phủ trọn vẹn 6 nhóm kỹ năng cơ bản và các quy định pháp luật mới nhất.
+              Hệ thống cho phép Quản trị viên tùy biến câu hỏi, bổ sung câu hỏi mới, chỉnh sửa đáp án hoặc xóa câu hỏi. Dữ liệu sẽ tự động đồng bộ ngay lập tức sang bài làm của người học tại Cổng thông tin SAFE-LS.
             </p>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <div style="font-weight: 700; color: #1e293b;">Xem danh sách câu hỏi theo phân loại:</div>
-            <div style="display: flex; gap: 0.5rem;">
-              <button class="secondary-btn active" id="viewGvQuestionsBtn" onclick="switchQuestionView('gv')">🎓 Câu hỏi Giáo viên (18)</button>
-              <button class="secondary-btn" id="viewHsQuestionsBtn" onclick="switchQuestionView('hs')">🎒 Câu hỏi Học sinh (18)</button>
+          <!-- Thanh công cụ quản lý câu hỏi -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+              <span style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">Đối tượng:</span>
+              <button class="secondary-btn active" id="viewGvQuestionsBtn" onclick="switchQuestionView('gv')">
+                🎓 Giáo viên (<span id="gvCountBadge">18</span>)
+              </button>
+              <button class="secondary-btn" id="viewHsQuestionsBtn" onclick="switchQuestionView('hs')">
+                🎒 Học sinh (<span id="hsCountBadge">18</span>)
+              </button>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="primary-btn" onclick="openAddQuestionModal()" style="padding: 0.5rem 0.9rem; font-size: 0.85rem;">
+                ➕ Thêm câu hỏi mới
+              </button>
+              <button class="secondary-btn" onclick="resetQuestionsToDefault()" style="padding: 0.5rem 0.85rem; font-size: 0.85rem; color: #b45309;" title="Khôi phục lại 18 câu hỏi mặc định ban đầu">
+                🔄 Khôi phục mặc định
+              </button>
+              <button class="secondary-btn" onclick="exportQuestionsJSON()" style="padding: 0.5rem 0.85rem; font-size: 0.85rem;" title="Xuất file JSON sao lưu">
+                📥 Xuất JSON
+              </button>
+              <button class="secondary-btn" onclick="document.getElementById('importJsonInput').click()" style="padding: 0.5rem 0.85rem; font-size: 0.85rem;" title="Nhập file JSON từ máy tính">
+                📤 Nhập JSON
+              </button>
+              <input type="file" id="importJsonInput" accept=".json" style="display: none;" onchange="importQuestionsJSON(event)">
             </div>
           </div>
 
@@ -412,6 +521,82 @@ function doGet(e) {
 
     </div>
   </main>
+
+  <!-- Modal Thêm / Chỉnh Sửa Câu Hỏi -->
+  <div id="questionModal" class="admin-modal-overlay">
+    <div class="admin-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.75rem;">
+        <h3 id="modalTitle" style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">➕ Thêm Câu Hỏi Mới</h3>
+        <button type="button" onclick="closeQuestionModal()" style="background: none; border: none; font-size: 1.35rem; color: #64748b; cursor: pointer; padding: 0.25rem 0.5rem;">✕</button>
+      </div>
+
+      <form id="questionForm" onsubmit="event.preventDefault(); saveQuestionModal();">
+        <input type="hidden" id="modalQuestionId" value="">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="modal-form-group">
+            <label for="modalQuestionRole">Đối tượng áp dụng (*):</label>
+            <select id="modalQuestionRole">
+              <option value="gv">🎓 Giáo viên</option>
+              <option value="hs">🎒 Học sinh</option>
+            </select>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="modalQuestionSkill">Nhóm kỹ năng (*):</label>
+            <select id="modalQuestionSkill">
+              <option value="Nhận diện dữ liệu cá nhân">1. Nhận diện dữ liệu cá nhân</option>
+              <option value="Bảo vệ tài khoản và mật khẩu">2. Bảo vệ tài khoản và mật khẩu</option>
+              <option value="Nhận diện nguy cơ và lừa đảo">3. Nhận diện nguy cơ và lừa đảo</option>
+              <option value="Quản lý quyền riêng tư">4. Quản lý quyền riêng tư</option>
+              <option value="Sử dụng AI an toàn">5. Sử dụng AI an toàn</option>
+              <option value="Xử lý sự cố">6. Xử lý sự cố</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-form-group">
+          <label for="modalQuestionText">Nội dung câu hỏi (*):</label>
+          <textarea id="modalQuestionText" rows="3" placeholder="Nhập đề bài câu hỏi trắc nghiệm..." required></textarea>
+        </div>
+
+        <div class="modal-form-group">
+          <label style="margin-bottom: 0.5rem;">4 Phương án lựa chọn & Chọn đáp án đúng (*):</label>
+          
+          <div class="modal-opt-row">
+            <input type="radio" name="modalCorrectOpt" value="0" id="radioOpt0" checked title="Chọn làm đáp án đúng">
+            <input type="text" id="modalOpt0" placeholder="Phương án A..." required>
+          </div>
+
+          <div class="modal-opt-row">
+            <input type="radio" name="modalCorrectOpt" value="1" id="radioOpt1" title="Chọn làm đáp án đúng">
+            <input type="text" id="modalOpt1" placeholder="Phương án B..." required>
+          </div>
+
+          <div class="modal-opt-row">
+            <input type="radio" name="modalCorrectOpt" value="2" id="radioOpt2" title="Chọn làm đáp án đúng">
+            <input type="text" id="modalOpt2" placeholder="Phương án C..." required>
+          </div>
+
+          <div class="modal-opt-row">
+            <input type="radio" name="modalCorrectOpt" value="3" id="radioOpt3" title="Chọn làm đáp án đúng">
+            <input type="text" id="modalOpt3" placeholder="Phương án D..." required>
+          </div>
+          <span style="font-size: 0.8rem; color: #64748b;">(Tích chọn nút tròn trước phương án để đặt làm đáp án đúng)</span>
+        </div>
+
+        <div class="modal-form-group">
+          <label for="modalQuestionExplanation">Giải thích / Căn cứ pháp lý (Luật 91/2025/QH15...):</label>
+          <textarea id="modalQuestionExplanation" rows="2" placeholder="Giải thích vì sao phương án này là đúng..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+          <button type="button" class="secondary-btn" onclick="closeQuestionModal()">Hủy bỏ</button>
+          <button type="submit" class="primary-btn">💾 Lưu Câu Hỏi</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script src="app.js"></script>
   <script>
@@ -760,16 +945,53 @@ function doGet(e) {
       alert('Đã sao chép mã Google Apps Script! Hãy dán vào Google Sheets của bạn.');
     }
 
+    let currentQuestionType = 'gv'; // 'gv' hoặc 'hs'
+
+    // Lấy danh sách câu hỏi đang lưu (ưu tiên LocalStorage tùy chỉnh)
+    function getAdminQuestions(type) {
+      if (typeof window.getActiveQuestions === 'function') {
+        return window.getActiveQuestions(type);
+      }
+      const isTeacher = (type === 'gv' || type === 'teacher');
+      const key = isTeacher ? 'safels_custom_teacher_questions' : 'safels_custom_student_questions';
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      return isTeacher 
+        ? (window.DEFAULT_TEACHER_QUESTIONS || window.teacherQuizQuestions || [])
+        : (window.DEFAULT_STUDENT_QUESTIONS || window.studentQuizQuestions || []);
+    }
+
+    // Lưu danh sách câu hỏi vào LocalStorage
+    function saveAdminQuestions(type, list) {
+      const isTeacher = (type === 'gv' || type === 'teacher');
+      const key = isTeacher ? 'safels_custom_teacher_questions' : 'safels_custom_student_questions';
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    // Cập nhật số đếm badge câu hỏi
+    function updateQuestionsCountBadges() {
+      const gvList = getAdminQuestions('gv');
+      const hsList = getAdminQuestions('hs');
+      const gvBadge = document.getElementById('gvCountBadge');
+      const hsBadge = document.getElementById('hsCountBadge');
+      if (gvBadge) gvBadge.textContent = gvList.length;
+      if (hsBadge) hsBadge.textContent = hsList.length;
+    }
+
     // Hiển thị danh sách câu hỏi
     function switchQuestionView(type) {
+      currentQuestionType = type;
       const gvBtn = document.getElementById('viewGvQuestionsBtn');
       const hsBtn = document.getElementById('viewHsQuestionsBtn');
       const container = document.getElementById('questionsListContainer');
       if (!container) return;
 
-      const list = type === 'gv' 
-        ? (window.teacherQuizQuestions || (typeof teacherQuizQuestions !== 'undefined' ? teacherQuizQuestions : []))
-        : (window.studentQuizQuestions || (typeof studentQuizQuestions !== 'undefined' ? studentQuizQuestions : []));
+      updateQuestionsCountBadges();
 
       if (gvBtn && hsBtn) {
         if (type === 'gv') {
@@ -781,18 +1003,266 @@ function doGet(e) {
         }
       }
 
-      container.innerHTML = list.map((q, idx) => `
-        <div class="content-box" style="margin-bottom: 0.85rem; background: #ffffff;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-            <span class="badge-tag">${q.skill || ''}</span>
-            <span style="font-size: 0.8rem; color: #64748b;">Câu ${idx + 1} / ${list.length}</span>
+      const list = getAdminQuestions(type);
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem; background: #ffffff; border-radius: 12px; border: 1px dashed #cbd5e1; color: #64748b;">
+            <p style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem;">Chưa có câu hỏi nào trong danh mục này.</p>
+            <button class="primary-btn" onclick="openAddQuestionModal()" style="margin-top: 0.5rem;">➕ Thêm câu hỏi đầu tiên</button>
           </div>
-          <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">${q.q || ''}</div>
-          <div style="font-size: 0.85rem; color: #15803d; font-weight: 600; background: #f0fdf4; padding: 0.5rem 0.75rem; border-radius: 6px;">
-            Đáp án đúng: ${q.options && q.options[q.correct] ? q.options[q.correct] : ''}
+        `;
+        return;
+      }
+
+      const optLetters = ['A', 'B', 'C', 'D'];
+
+      container.innerHTML = list.map((q, idx) => {
+        return `
+          <div class="question-manage-card" id="qcard-${q.id || idx}">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.65rem; gap: 0.75rem; flex-wrap: wrap;">
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span class="badge-tag">${q.skill || 'Kỹ năng chung'}</span>
+                <span style="font-size: 0.85rem; font-weight: 700; color: #475569;">Câu ${idx + 1} / ${list.length}</span>
+                <span style="font-size: 0.78rem; color: #94a3b8; font-family: monospace;">(ID: ${q.id || ('q_' + (idx + 1))})</span>
+              </div>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="secondary-btn" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;" onclick="openEditQuestionModal('${type}', '${q.id || idx}')">
+                  ✏️ Sửa
+                </button>
+                <button class="secondary-btn" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; color: #dc2626; border-color: #fecaca;" onclick="deleteQuestion('${type}', '${q.id || idx}')">
+                  🗑️ Xóa
+                </button>
+              </div>
+            </div>
+
+            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.85rem; line-height: 1.5;">
+              ${q.q || ''}
+            </div>
+
+            <div style="margin-bottom: 0.75rem;">
+              ${(q.options || []).map((opt, optIdx) => {
+                const isCorrect = optIdx === q.correct;
+                return `
+                  <div class="opt-preview-item ${isCorrect ? 'is-correct' : ''}">
+                    <span style="display: inline-block; width: 22px; font-weight: 700;">${optLetters[optIdx] || optIdx + 1}.</span>
+                    <span>${opt}</span>
+                    ${isCorrect ? '<span style="margin-left: 0.5rem; font-size: 0.8rem; color: #166534; font-weight: 800;">✓ [Đáp án đúng]</span>' : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            ${q.explanation ? `
+              <div style="font-size: 0.85rem; color: #1e40af; background: #eff6ff; padding: 0.6rem 0.85rem; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                <strong>💡 Căn cứ / Giải thích:</strong> ${q.explanation}
+              </div>
+            ` : ''}
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+    }
+
+    // Mở Modal Thêm mới
+    function openAddQuestionModal() {
+      document.getElementById('modalTitle').textContent = '➕ Thêm Câu Hỏi Mới';
+      document.getElementById('modalQuestionId').value = '';
+      document.getElementById('modalQuestionRole').value = currentQuestionType;
+      document.getElementById('modalQuestionSkill').value = 'Nhận diện dữ liệu cá nhân';
+      document.getElementById('modalQuestionText').value = '';
+      document.getElementById('modalOpt0').value = '';
+      document.getElementById('modalOpt1').value = '';
+      document.getElementById('modalOpt2').value = '';
+      document.getElementById('modalOpt3').value = '';
+      document.getElementById('radioOpt0').checked = true;
+      document.getElementById('modalQuestionExplanation').value = '';
+
+      document.getElementById('questionModal').classList.add('open');
+    }
+
+    // Mở Modal Chỉnh sửa
+    function openEditQuestionModal(type, questionId) {
+      const list = getAdminQuestions(type);
+      const q = list.find((item, idx) => (item.id === questionId || String(idx) === String(questionId)));
+      if (!q) {
+        alert('Không tìm thấy thông tin câu hỏi!');
+        return;
+      }
+
+      document.getElementById('modalTitle').textContent = '✏️ Chỉnh Sửa Câu Hỏi';
+      document.getElementById('modalQuestionId').value = q.id || questionId;
+      document.getElementById('modalQuestionRole').value = type;
+      
+      const skillSelect = document.getElementById('modalQuestionSkill');
+      skillSelect.value = q.skill || 'Nhận diện dữ liệu cá nhân';
+      
+      document.getElementById('modalQuestionText').value = q.q || '';
+      document.getElementById('modalOpt0').value = q.options && q.options[0] ? q.options[0] : '';
+      document.getElementById('modalOpt1').value = q.options && q.options[1] ? q.options[1] : '';
+      document.getElementById('modalOpt2').value = q.options && q.options[2] ? q.options[2] : '';
+      document.getElementById('modalOpt3').value = q.options && q.options[3] ? q.options[3] : '';
+
+      const correctIdx = typeof q.correct === 'number' ? q.correct : 0;
+      const radio = document.querySelector(`input[name="modalCorrectOpt"][value="${correctIdx}"]`);
+      if (radio) radio.checked = true;
+
+      document.getElementById('modalQuestionExplanation').value = q.explanation || '';
+      document.getElementById('questionModal').classList.add('open');
+    }
+
+    function closeQuestionModal() {
+      document.getElementById('questionModal').classList.remove('open');
+    }
+
+    // Lưu câu hỏi từ Modal Form
+    function saveQuestionModal() {
+      const qId = document.getElementById('modalQuestionId').value;
+      const role = document.getElementById('modalQuestionRole').value;
+      const skill = document.getElementById('modalQuestionSkill').value;
+      const qText = document.getElementById('modalQuestionText').value.trim();
+      
+      const opt0 = document.getElementById('modalOpt0').value.trim();
+      const opt1 = document.getElementById('modalOpt1').value.trim();
+      const opt2 = document.getElementById('modalOpt2').value.trim();
+      const opt3 = document.getElementById('modalOpt3').value.trim();
+      
+      const correctRadio = document.querySelector('input[name="modalCorrectOpt"]:checked');
+      const correctIdx = correctRadio ? parseInt(correctRadio.value, 10) : 0;
+      const explanation = document.getElementById('modalQuestionExplanation').value.trim();
+
+      if (!qText) {
+        alert('Vui lòng nhập nội dung câu hỏi!');
+        return;
+      }
+      if (!opt0 || !opt1 || !opt2 || !opt3) {
+        alert('Vui lòng nhập đầy đủ cả 4 phương án lựa chọn A, B, C, D!');
+        return;
+      }
+
+      const list = [...getAdminQuestions(role)];
+
+      if (qId) {
+        // Cập nhật câu hỏi hiện có
+        const existingIdx = list.findIndex((item, idx) => (item.id === qId || String(idx) === String(qId)));
+        if (existingIdx !== -1) {
+          list[existingIdx] = {
+            ...list[existingIdx],
+            skill,
+            q: qText,
+            options: [opt0, opt1, opt2, opt3],
+            correct: correctIdx,
+            explanation
+          };
+        } else {
+          list.push({
+            id: qId,
+            skill,
+            q: qText,
+            options: [opt0, opt1, opt2, opt3],
+            correct: correctIdx,
+            explanation
+          });
+        }
+      } else {
+        // Thêm câu hỏi mới
+        const newId = `${role}_${Date.now()}`;
+        list.push({
+          id: newId,
+          skill,
+          q: qText,
+          options: [opt0, opt1, opt2, opt3],
+          correct: correctIdx,
+          explanation
+        });
+      }
+
+      saveAdminQuestions(role, list);
+      closeQuestionModal();
+      currentQuestionType = role;
+      switchQuestionView(role);
+      alert('✅ Đã lưu câu hỏi thành công! Bài làm tại Cổng thông tin SAFE-LS đã được cập nhật.');
+    }
+
+    // Xóa câu hỏi
+    function deleteQuestion(type, questionId) {
+      if (!confirm('Bạn có chắc chắn muốn xóa câu hỏi này khỏi ngân hàng câu hỏi không? Thao tác này không thể hoàn tác trừ khi bạn bấm Khôi phục mặc định.')) {
+        return;
+      }
+
+      const list = getAdminQuestions(type);
+      const filtered = list.filter((item, idx) => (item.id !== questionId && String(idx) !== String(questionId)));
+
+      if (filtered.length === 0) {
+        alert('Không thể xóa hết toàn bộ câu hỏi. Ngân hàng cần ít nhất 1 câu hỏi.');
+        return;
+      }
+
+      saveAdminQuestions(type, filtered);
+      switchQuestionView(type);
+      alert('🗑️ Đã xóa câu hỏi thành công!');
+    }
+
+    // Khôi phục bộ 18 câu mặc định ban đầu
+    function resetQuestionsToDefault() {
+      const typeLabel = currentQuestionType === 'gv' ? 'Giáo viên' : 'Học sinh';
+      if (!confirm(`Bạn có chắc chắn muốn khôi phục lại 18 câu hỏi mặc định gốc cho đối tượng [${typeLabel}] không? Mọi chỉnh sửa của đối tượng này sẽ được đặt lại theo chuẩn đề án SAFE-LS ban đầu.`)) {
+        return;
+      }
+
+      const key = currentQuestionType === 'gv' ? 'safels_custom_teacher_questions' : 'safels_custom_student_questions';
+      localStorage.removeItem(key);
+      switchQuestionView(currentQuestionType);
+      alert(`🔄 Đã khôi phục 18 câu hỏi mặc định gốc cho ${typeLabel} thành công!`);
+    }
+
+    // Xuất file JSON
+    function exportQuestionsJSON() {
+      const data = {
+        exportedAt: new Date().toISOString(),
+        version: '1.0',
+        project: 'SAFE-LS',
+        teacherQuestions: getAdminQuestions('gv'),
+        studentQuestions: getAdminQuestions('hs')
+      };
+
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SAFE_LS_Ngan_Hang_Cau_Hoi_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Nhập file JSON
+    function importQuestionsJSON(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          let count = 0;
+          if (Array.isArray(imported.teacherQuestions)) {
+            saveAdminQuestions('gv', imported.teacherQuestions);
+            count += imported.teacherQuestions.length;
+          }
+          if (Array.isArray(imported.studentQuestions)) {
+            saveAdminQuestions('hs', imported.studentQuestions);
+            count += imported.studentQuestions.length;
+          }
+          switchQuestionView(currentQuestionType);
+          alert(`📥 Đã nhập thành công ${count} câu hỏi từ file JSON!`);
+        } catch (err) {
+          alert('Lỗi: File JSON không đúng định dạng chuẩn SAFE-LS!');
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(file);
     }
 
     // Đảm bảo tất cả hàm đều có trên window cho inline HTML events
@@ -809,6 +1279,14 @@ function doGet(e) {
     window.testGSheetConnection = testGSheetConnection;
     window.copyAppsScript = copyAppsScript;
     window.switchQuestionView = switchQuestionView;
+    window.openAddQuestionModal = openAddQuestionModal;
+    window.openEditQuestionModal = openEditQuestionModal;
+    window.closeQuestionModal = closeQuestionModal;
+    window.saveQuestionModal = saveQuestionModal;
+    window.deleteQuestion = deleteQuestion;
+    window.resetQuestionsToDefault = resetQuestionsToDefault;
+    window.exportQuestionsJSON = exportQuestionsJSON;
+    window.importQuestionsJSON = importQuestionsJSON;
   </script>
 </body>
 </html>
