@@ -113,7 +113,7 @@
         <h2 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;">Đăng Nhập Quản Trị SAFE-LS</h2>
         <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 1.5rem;">Dành cho giáo viên và nhóm nghiên cứu quản lý số liệu</p>
 
-        <input type="password" id="pinInput" placeholder="Nhập mã PIN (Mặc định: safels2026)" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 1rem; text-align: center; margin-bottom: 1rem;">
+        <input type="password" id="pinInput" placeholder="Nhập mã PIN (Mặc định: safels2026)" onkeydown="if(event.key === 'Enter') checkPin()" style="width: 100%; padding: 0.85rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 1rem; text-align: center; margin-bottom: 1rem;">
         <button class="primary-btn" style="width: 100%; justify-content: center;" onclick="checkPin()">
           Đăng Nhập Hệ Thống
         </button>
