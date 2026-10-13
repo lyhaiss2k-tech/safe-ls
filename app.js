@@ -1186,11 +1186,14 @@ function saveSubmissionLocally(data) {
   }
 }
 
-const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+// Gắn URL Webhook và ngân hàng câu hỏi lên window an toàn, tránh lỗi trùng biến const
+window.DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+window.teacherQuizQuestions = typeof teacherQuizQuestions !== 'undefined' ? teacherQuizQuestions : [];
+window.studentQuizQuestions = typeof studentQuizQuestions !== 'undefined' ? studentQuizQuestions : [];
 
 // Hàm gửi dữ liệu sang Google Sheets Webhook
 async function sendToGoogleSheet(data) {
-  const webhookUrl = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
+  const webhookUrl = localStorage.getItem('safels_gsheet_url') || window.DEFAULT_GSHEET_WEBHOOK_URL;
   if (!webhookUrl) return false;
 
   try {
@@ -1206,3 +1209,4 @@ async function sendToGoogleSheet(data) {
     return false;
   }
 }
+

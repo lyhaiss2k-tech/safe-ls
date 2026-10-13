@@ -419,7 +419,7 @@ function doGet(e) {
     const CORRECT_PIN = 'safels2026';
 
     function checkPin() {
-      const pinRaw = document.getElementById('pinInput').value.trim();
+      const pinRaw = (document.getElementById('pinInput')?.value || '').trim();
       const err = document.getElementById('pinErrorMsg');
 
       // Tự động chuẩn hóa nếu bộ gõ tiếng Việt Unikey Telex biến 'af' thành 'à'
@@ -431,18 +431,23 @@ function doGet(e) {
       const isValid = (
         pinRaw.toLowerCase() === CORRECT_PIN ||
         pinNorm === CORRECT_PIN ||
-        pinRaw === localStorage.getItem('safels_custom_pin')
+        (pinRaw && pinRaw === localStorage.getItem('safels_custom_pin'))
       );
 
       if (isValid) {
-        document.getElementById('adminLoginBox').style.display = 'none';
-        document.getElementById('adminDashboardBox').style.display = 'block';
-        document.getElementById('adminLogoutBtn').style.display = 'inline-flex';
+        sessionStorage.setItem('safels_admin_logged_in', 'true');
+        const loginBox = document.getElementById('adminLoginBox');
+        const dashBox = document.getElementById('adminDashboardBox');
+        const logoutBtn = document.getElementById('adminLogoutBtn');
+        if (loginBox) loginBox.style.display = 'none';
+        if (dashBox) dashBox.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
         if (err) err.style.display = 'none';
-        loadAdminStats();
-        loadGSheetConfig();
-        syncDataFromGSheet(true); // Tự động đồng bộ ngay khi đăng nhập
-        switchQuestionView('gv');
+
+        try { loadAdminStats(); } catch (e) { console.warn('Stats err:', e); }
+        try { loadGSheetConfig(); } catch (e) { console.warn('GSheet config err:', e); }
+        try { syncDataFromGSheet(true); } catch (e) { console.warn('Sync err:', e); }
+        try { switchQuestionView('gv'); } catch (e) { console.warn('Questions view err:', e); }
       } else {
         if (err) err.style.display = 'block';
       }
@@ -451,6 +456,7 @@ function doGet(e) {
     function togglePinVisibility() {
       const input = document.getElementById('pinInput');
       const icon = document.getElementById('eyeIcon');
+      if (!input || !icon) return;
       if (input.type === 'password') {
         input.type = 'text';
         icon.textContent = '🙈';
@@ -462,18 +468,42 @@ function doGet(e) {
 
     function quickFillPin() {
       const input = document.getElementById('pinInput');
-      input.value = 'safels2026';
-      input.type = 'text';
-      document.getElementById('eyeIcon').textContent = '🙈';
+      if (input) {
+        input.value = 'safels2026';
+        input.type = 'text';
+      }
+      const icon = document.getElementById('eyeIcon');
+      if (icon) icon.textContent = '🙈';
       checkPin();
     }
 
     function logoutAdmin() {
-      document.getElementById('adminLoginBox').style.display = 'block';
-      document.getElementById('adminDashboardBox').style.display = 'none';
-      document.getElementById('adminLogoutBtn').style.display = 'none';
-      document.getElementById('pinInput').value = '';
+      sessionStorage.removeItem('safels_admin_logged_in');
+      const loginBox = document.getElementById('adminLoginBox');
+      const dashBox = document.getElementById('adminDashboardBox');
+      const logoutBtn = document.getElementById('adminLogoutBtn');
+      if (loginBox) loginBox.style.display = 'block';
+      if (dashBox) dashBox.style.display = 'none';
+      if (logoutBtn) logoutBtn.style.display = 'none';
+      const input = document.getElementById('pinInput');
+      if (input) input.value = '';
     }
+
+    // Tự động duy trì đăng nhập nếu đang trong phiên làm việc
+    document.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('safels_admin_logged_in') === 'true') {
+        const loginBox = document.getElementById('adminLoginBox');
+        const dashBox = document.getElementById('adminDashboardBox');
+        const logoutBtn = document.getElementById('adminLogoutBtn');
+        if (loginBox) loginBox.style.display = 'none';
+        if (dashBox) dashBox.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        try { loadAdminStats(); } catch(e) {}
+        try { loadGSheetConfig(); } catch(e) {}
+        try { syncDataFromGSheet(true); } catch(e) {}
+        try { switchQuestionView('gv'); } catch(e) {}
+      }
+    });
 
     // Tabs Switching
     document.querySelectorAll('.admin-tab-btn').forEach(btn => {
@@ -627,27 +657,32 @@ function doGet(e) {
       }
     }
 
-    const DEFAULT_GSHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+    function getWebhookUrl() {
+      return localStorage.getItem('safels_gsheet_url') || window.DEFAULT_GSHEET_WEBHOOK_URL || 'https://script.google.com/macros/s/AKfycbyhTm79tQOIUDtQ6WOy_J0ssF0YBACRXWg_jqboq0tRnHUhT1Gxl_rJJoW7YTKM2G-8RQ/exec';
+    }
 
     // Google Sheets Config
     function loadGSheetConfig() {
-      const url = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
-      document.getElementById('gsheetUrlInput').value = url;
-      if (url) {
-        document.getElementById('gsheetStatusText').innerHTML = `✅ Đã kết nối với Webhook: <code style="word-break: break-all;">${url}</code>`;
-        document.getElementById('gsheetStatusText').style.color = '#15803d';
+      const url = getWebhookUrl();
+      const input = document.getElementById('gsheetUrlInput');
+      if (input) input.value = url;
+      const statusEl = document.getElementById('gsheetStatusText');
+      if (statusEl && url) {
+        statusEl.innerHTML = `✅ Đã kết nối với Webhook: <code style="word-break: break-all;">${url}</code>`;
+        statusEl.style.color = '#15803d';
       }
     }
 
     function saveGSheetUrl() {
-      const url = document.getElementById('gsheetUrlInput').value.trim();
-      localStorage.setItem('safels_gsheet_url', url || DEFAULT_GSHEET_WEBHOOK_URL);
+      const input = document.getElementById('gsheetUrlInput');
+      const url = (input ? input.value : '').trim();
+      localStorage.setItem('safels_gsheet_url', url || getWebhookUrl());
       loadGSheetConfig();
       syncDataFromGSheet(false);
     }
 
     async function syncDataFromGSheet(silent = false) {
-      const url = localStorage.getItem('safels_gsheet_url') || DEFAULT_GSHEET_WEBHOOK_URL;
+      const url = getWebhookUrl();
       if (!url) {
         if (!silent) alert('Bạn chưa cấu hình URL Google Sheets! Vui lòng vào tab "Cấu hình Google Sheets" để lưu URL Webhook.');
         return;
@@ -688,7 +723,7 @@ function doGet(e) {
     }
 
     async function testGSheetConnection() {
-      const url = document.getElementById('gsheetUrlInput').value.trim() || DEFAULT_GSHEET_WEBHOOK_URL;
+      const url = (document.getElementById('gsheetUrlInput')?.value || '').trim() || getWebhookUrl();
       if (!url) {
         alert('Vui lòng nhập URL Google Sheets trước!');
         return;
@@ -720,7 +755,7 @@ function doGet(e) {
     }
 
     function copyAppsScript() {
-      const code = document.getElementById('appsScriptCode').innerText;
+      const code = document.getElementById('appsScriptCode')?.innerText || '';
       navigator.clipboard.writeText(code);
       alert('Đã sao chép mã Google Apps Script! Hãy dán vào Google Sheets của bạn.');
     }
@@ -730,30 +765,50 @@ function doGet(e) {
       const gvBtn = document.getElementById('viewGvQuestionsBtn');
       const hsBtn = document.getElementById('viewHsQuestionsBtn');
       const container = document.getElementById('questionsListContainer');
+      if (!container) return;
 
-      const list = type === 'gv' ? teacherQuizQuestions : studentQuizQuestions;
+      const list = type === 'gv' 
+        ? (window.teacherQuizQuestions || (typeof teacherQuizQuestions !== 'undefined' ? teacherQuizQuestions : []))
+        : (window.studentQuizQuestions || (typeof studentQuizQuestions !== 'undefined' ? studentQuizQuestions : []));
 
-      if (type === 'gv') {
-        gvBtn.classList.add('active');
-        hsBtn.classList.remove('active');
-      } else {
-        hsBtn.classList.add('active');
-        gvBtn.classList.remove('active');
+      if (gvBtn && hsBtn) {
+        if (type === 'gv') {
+          gvBtn.classList.add('active');
+          hsBtn.classList.remove('active');
+        } else {
+          hsBtn.classList.add('active');
+          gvBtn.classList.remove('active');
+        }
       }
 
       container.innerHTML = list.map((q, idx) => `
         <div class="content-box" style="margin-bottom: 0.85rem; background: #ffffff;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-            <span class="badge-tag">${q.skill}</span>
+            <span class="badge-tag">${q.skill || ''}</span>
             <span style="font-size: 0.8rem; color: #64748b;">Câu ${idx + 1} / ${list.length}</span>
           </div>
-          <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">${q.q}</div>
+          <div style="font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">${q.q || ''}</div>
           <div style="font-size: 0.85rem; color: #15803d; font-weight: 600; background: #f0fdf4; padding: 0.5rem 0.75rem; border-radius: 6px;">
-            Đáp án đúng: ${q.options[q.correct]}
+            Đáp án đúng: ${q.options && q.options[q.correct] ? q.options[q.correct] : ''}
           </div>
         </div>
       `).join('');
     }
+
+    // Đảm bảo tất cả hàm đều có trên window cho inline HTML events
+    window.checkPin = checkPin;
+    window.togglePinVisibility = togglePinVisibility;
+    window.quickFillPin = quickFillPin;
+    window.logoutAdmin = logoutAdmin;
+    window.filterTable = filterTable;
+    window.exportDataToCSV = exportDataToCSV;
+    window.addSampleData = addSampleData;
+    window.clearAllData = clearAllData;
+    window.saveGSheetUrl = saveGSheetUrl;
+    window.syncDataFromGSheet = syncDataFromGSheet;
+    window.testGSheetConnection = testGSheetConnection;
+    window.copyAppsScript = copyAppsScript;
+    window.switchQuestionView = switchQuestionView;
   </script>
 </body>
 </html>
